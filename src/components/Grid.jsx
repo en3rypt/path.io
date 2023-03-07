@@ -1,8 +1,10 @@
 import React from 'react'
 
+//components
+import Node from './Node'
 function Grid() {
   return (
-    <div>Griddddddd</div>
+    <Node />
   )
 }
 
