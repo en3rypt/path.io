@@ -5,8 +5,15 @@ import React,{useState} from 'react'
 
 function Grid(props) {
   const [mouseDown, setMouseDown] = useState(false)
+  const [wallTiles, setWallTiles] = useState(false)
   function handleMouseDown(node){
     if(node.isStartNode || node.isEndNode) return;
+    if(node.isWall){
+      setWallTiles(true)
+    }else{
+      setWallTiles(false)
+    }
+    
     node.isWall = !node.isWall
     setMouseDown(true)
   }
@@ -59,7 +66,10 @@ function Grid(props) {
                       className={getClassName(node)} 
                       onMouseDown={()=>{handleMouseDown(node)}} 
                       onMouseUp={handleMouseUp} 
-                      onMouseOver={()=>{handleMouseOver(node)}} 
+                      onMouseOver={()=>{handleMouseOver(node)}}
+                      // onTouchStart={()=>{handleMouseDown(node)}}
+                      // onTouchMove={()=>{handleMouseOver(node)}}
+                      // onTouchEnd={handleMouseUp}
                     />
                   )
                 })
