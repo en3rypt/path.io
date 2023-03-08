@@ -1,11 +1,11 @@
-const BFS = (graph, start, end) => {
-    const queue = [start];
+const DFS = (graph, start, end) => {
+    const stack = [start];
     const path = [];
     const visited = new Set();
     visited.add(start);
 
-    while (queue.length > 0) {
-        const node = queue.shift();
+    while (stack.length > 0) {
+        const node = stack.pop();
         path.push(node);
         const neighbors = graph[node];
 
@@ -17,7 +17,7 @@ const BFS = (graph, start, end) => {
 
             if (!visited.has(neighbor)) {
                 visited.add(neighbor);
-                queue.push(neighbor);
+                stack.push(neighbor);
             }
         }
     }
@@ -25,4 +25,4 @@ const BFS = (graph, start, end) => {
     return { pathExists: false, path };
 };
 
-export default BFS;
+export default DFS;
