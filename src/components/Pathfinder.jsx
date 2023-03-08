@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react'
 
 //components
 import Grid from './Grid'
-
+import Commands from './Commands'
 function Pathfinder() {
     //grid
     const [grid, setGrid] = useState({
@@ -75,11 +75,15 @@ function Pathfinder() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    console.log(grid)
     return (
         <div>
-            
+            <Commands 
+                grid={grid}
+                setGrid={setGrid}    
+            />
             <Grid 
-                grid={grid.nodes}
+                grid={grid}
                 setGrid={setGrid}
                 rows={grid.rows} 
                 cols={grid.cols} 
