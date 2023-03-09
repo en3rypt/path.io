@@ -43,6 +43,7 @@ function Pathfinder() {
                     isEndNode: i === endX && j === endY,
                     isWall: false,
                     isVisited: false,
+                    isPath: false,
                     distance: Infinity,
                     previousNode: null,
                 })
@@ -57,10 +58,8 @@ function Pathfinder() {
         function handleResize() {
             const width = window.innerWidth;
             const height = window.innerHeight;
-            const row = 5;
-            const col = 5;
-            // const row = Math.max(Math.floor(height / 40) - 3, 3)
-            // const col = Math.max(Math.floor(width / 40) - 2, 3)
+            const row = Math.max(Math.floor(height / 40) - 3, 3)
+            const col = Math.max(Math.floor(width / 40) - 2, 3)
             const [startX, startY] = randomXY(row, col)
             const [endX, endY] = randomXY(row, col)
             const initialGrid = populateGrid(row, col, startX, startY, endX, endY)
@@ -117,14 +116,18 @@ function Pathfinder() {
 
 
     if (gridIsSet) {
-        const visitedNodes = getNodesToColorFromBFS(
+        const pathNodes = getNodesToColorFromBFS(
             BFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).addedToQueueBy, grid.endNode
         )
+
+        const visitedNodes = BFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).visited
+
         const newGrid = grid.nodes.map((row, i) => {
             return row.map((node, j) => {
                 const nodeKey = `${node.x}-${node.y}`;
-                const isVisited = visitedNodes.includes(nodeKey);
-                return { ...node, isVisited };
+                const isVisited = visitedNodes.has(nodeKey);
+                const isPath = pathNodes.includes(nodeKey);
+                return { ...node, isVisited, isPath };
             });
         });
         setGrid({ ...grid, nodes: newGrid })

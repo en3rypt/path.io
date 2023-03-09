@@ -12,7 +12,8 @@ const BFS = (graph, start, end) => {
 
             if (neighbor === end) {
                 addedToQueueBy[neighbor] = node;
-                return { pathExists: true, addedToQueueBy };
+                visited.add(neighbor);
+                return { pathExists: true, addedToQueueBy, visited };
             }
 
             if (!visited.has(neighbor)) {
@@ -23,7 +24,7 @@ const BFS = (graph, start, end) => {
         }
     }
 
-    return { pathExists: false, addedToQueueBy };
+    return { pathExists: false, addedToQueueBy, visited };
 };
 
 export default BFS;

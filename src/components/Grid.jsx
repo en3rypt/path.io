@@ -42,8 +42,12 @@ function Grid(props) {
     if (node.isWall) {
       classname += "bg-stone-500  animate-wallAnimation"
     }
-    if (node.isVisited) {
+    if (node.isPath) {
       classname += "bg-cyan-400 animate-wallAnimation"
+    }
+
+    if (node.isVisited) {
+      classname += "bg-cyan-500 animate-wallAnimation"
     }
 
     return classname
