@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React, { useState } from 'react'
 
 //components
 function Grid(props) {
@@ -101,23 +101,32 @@ function Grid(props) {
                 isWall: !col.isWall
               }
             }
-            return col
-          })
+          }
+          return col
         })
       })
-    
+    })
+
   }
-  function getClassName(node){
+  function getClassName(node) {
     var classname = "w-[40px] h-[40px] outline outline-1 outline-slate-900 "
-    if(node.isStartNode){
+    if (node.isStartNode) {
       classname += "bg-green-500 animate-wallAnimation"
     }
-    if(node.isEndNode){
+    if (node.isEndNode) {
       classname += "bg-red-500 animate-wallAnimation"
     }
-    if(node.isWall){
+    if (node.isWall) {
       classname += "bg-stone-500  animate-wallAnimation"
     }
+    if (node.isPath) {
+      classname += "bg-cyan-400 animate-wallAnimation"
+    }
+
+    if (node.isVisited) {
+      classname += "bg-cyan-500 animate-wallAnimation"
+    }
+
     return classname
   }
 
@@ -129,8 +138,8 @@ function Grid(props) {
             <div className='flex flex-row' key={`row-${rowIndex}`}>
               {
                 row.map((node, colIndex) => {
-                  return (                    
-                    <div 
+                  return (
+                    <div
                       key={`node-${rowIndex}-${colIndex}`}
                       className={getClassName(node)} 
                       onMouseDown={()=>{handleMouseDown(node)}} 
@@ -140,7 +149,7 @@ function Grid(props) {
                       // onTouchMove={()=>{handleMouseOver(node)}}
                       // onTouchEnd={handleMouseUp}
                     />
-                  )
+                  );
                 })
               }
             </div>
@@ -148,7 +157,7 @@ function Grid(props) {
         })
       }
     </div>
-  ) 
+  )
 }
 
 export default Grid

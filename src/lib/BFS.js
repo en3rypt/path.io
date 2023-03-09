@@ -1,28 +1,30 @@
 const BFS = (graph, start, end) => {
     const queue = [start];
-    const path = [];
+    const addedToQueueBy = {};
     const visited = new Set();
     visited.add(start);
 
     while (queue.length > 0) {
         const node = queue.shift();
-        path.push(node);
         const neighbors = graph[node];
 
         for (let neighbor of neighbors) {
 
             if (neighbor === end) {
-                return { pathExists: true, path: [...path, neighbor] };
+                addedToQueueBy[neighbor] = node;
+                visited.add(neighbor);
+                return { pathExists: true, addedToQueueBy, visited };
             }
 
             if (!visited.has(neighbor)) {
                 visited.add(neighbor);
+                addedToQueueBy[neighbor] = node;
                 queue.push(neighbor);
             }
         }
     }
 
-    return { pathExists: false, path };
+    return { pathExists: false, addedToQueueBy, visited };
 };
 
 export default BFS;
