@@ -3,7 +3,7 @@ import React,{useState} from 'react'
 //components
 function Grid(props) {
   const [mouseDown, setMouseDown] = useState(false)
-  const [wallTiles, setWallTiles] = useState(false)
+  const [wallSelcted, setWallSelected] = useState(false)
   const [endNodeMove,setendNodeMove] = useState(false)
   const [startNodeMove,setstartNodeMove] = useState(false)
   function handleMouseDown(node){
@@ -15,9 +15,9 @@ function Grid(props) {
       return
     }
     if(node.isWall){
-      setWallTiles(true)
+      setWallSelected(true)
     }else{
-      setWallTiles(false)
+      setWallSelected(false)
     }
     
     node.isWall = !node.isWall
