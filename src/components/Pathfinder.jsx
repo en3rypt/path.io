@@ -5,7 +5,7 @@ import Grid from './Grid'
 
 
 // graph
-import { Graph, BFS } from '../lib';
+import { Graph, BFS, DFS } from '../lib';
 
 import Commands from './Commands'
 import Stats from './Stats'
@@ -62,6 +62,7 @@ function Pathfinder() {
         function handleResize() {
             const width = window.innerWidth;
             const height = window.innerHeight;
+            // const [row, col] = [5, 5];
             const row = Math.max(Math.floor(height / 40) - 3, 3)
             const col = Math.max(Math.floor(width / 40) - 2, 3)
             const [startX, startY] = randomXY(row, col)
@@ -113,7 +114,8 @@ function Pathfinder() {
 
     const getNodesToColorFromBFS = (addedToQueueBy, endNode) => {
         const nodesToColor = [];
-        let currentNode = endNode;
+        const endString = `${endNode.x}-${endNode.y}`;
+        let currentNode = endString;
         while (currentNode) {
             nodesToColor.unshift(currentNode);
             currentNode = addedToQueueBy[currentNode];
@@ -123,28 +125,66 @@ function Pathfinder() {
 
 
     function visualize() {
-        const pathNodes = getNodesToColorFromBFS(
-            BFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).addedToQueueBy, grid.endNode
-        )
+        // const stepWiseVisited = DFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWiseVisited;
+        // const visited = DFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).visited;
+        // const stepWisePath = DFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWisePath;
+        const stepWiseVisited = BFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWiseVisited;
+        const visited = BFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).visited;
+        const stepWisePath = BFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWisePath;
 
-        const visitedNodes = BFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).visited
-
-        console.log(pathNodes)
-
-        const newGrid = grid.nodes.map((row, i) => {
-            return row.map((node, j) => {
-                const nodeKey = `${node.x}-${node.y}`;
-                const isVisited = visitedNodes.has(nodeKey);
-                const isPath = pathNodes.includes(nodeKey);
-                return { ...node, isVisited, isPath };
+        stepWiseVisited.forEach(visitedStep => {
+            const newGrid = grid.nodes.map((row, i) => {
+                setTimeout(() => {
+                    setGrid({ ...grid, nodes: newGrid })
+                }, 1);
+                return row.map((node, j) => {
+                    const nodeKey = `${node.x}-${node.y}`;
+                    const isVisited = visitedStep.includes(nodeKey);
+                    return { ...node, isVisited };
+                });
             });
         });
-        setGrid({ ...grid, nodes: newGrid })
+
+        // change only the path nodes stepwise to isPath: true while keeping the visited nodes as isVisited: true and updating the grid
+        let newGrid = grid.nodes;
+        stepWisePath.forEach(pathStep => {
+            newGrid = grid.nodes.map((row, i) => {
+                return row.map((node, j) => {
+                    const nodeKey = `${node.x}-${node.y}`;
+                    const isVisited = visited.has(nodeKey);
+                    const isPath = pathStep.includes(nodeKey);
+                    setTimeout(() => {
+                        setGrid({ ...grid, nodes: newGrid })
+                    }, 10);
+                    if (isPath) {
+                        return { ...node, isPath, isVisited: false };
+                    } else if (isVisited) {
+                        return { ...node, isVisited, isPath: false };
+                    }
+                    return { ...node, isVisited, isPath };
+                });
+            });
+        });
+
+        // const newGrid = grid.nodes.map((row, i) => {
+        //     return row.map((node, j) => {
+        //         const nodeKey = `${node.x}-${node.y}`;
+        //         const isPath = pathNodes.includes(nodeKey);
+        //         const isVisited = visitedNodes.has(nodeKey);
+        //         if (isPath) {
+        //             return { ...node, isPath, isVisited: false };
+        //         } else if (isVisited) {
+        //             return { ...node, isVisited, isPath: false };
+        //         }
+
+
+        //         return { ...node, isVisited, isPath };
+        //     });
+        // });
+        // setGrid({ ...grid, nodes: newGrid })
         // setGridIsSet(false);
     }
 
-
-    console.log(grid)
     return (
         <div>
             <Stats grid={grid} />

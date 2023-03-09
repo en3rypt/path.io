@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 //components
 function Grid(props) {
   const [mouseDown, setMouseDown] = useState(false)
-  const [wallSelcted, setWallSelected] = useState(false)
+  const [wallSelected, setWallSelected] = useState(false)
   const [endNodeMove, setendNodeMove] = useState(false)
   const [startNodeMove, setstartNodeMove] = useState(false)
   function handleMouseDown(node) {
@@ -96,11 +96,11 @@ function Grid(props) {
       ...props.grid,
       nodes: props.grid.nodes.map((row, rowIndex) => {
         return row.map((col, colIndex) => {
-          
+
           if (rowIndex === node.x && colIndex === node.y && node.isWall === false && !node.isStartNode && !node.isEndNode) {
             return {
               ...col,
-               isWall: !col.isWall
+              isWall: !col.isWall
             }
           }
           return col
@@ -118,7 +118,7 @@ function Grid(props) {
       classname += "bg-red-500 animate-wallAnimation"
     }
     if (node.isWall) {
-      classname += "bg-stone-500  animate-wallAnimation"
+      classname += "bg-stone-500 animate-wallAnimation"
     }
     if (node.isVisited) {
       classname += "bg-blue-500 animate-wallAnimation"
@@ -126,8 +126,6 @@ function Grid(props) {
     if (node.isPath) {
       classname += "bg-cyan-400 animate-wallAnimation"
     }
-
-
     return classname
   }
 
