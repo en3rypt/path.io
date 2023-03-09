@@ -87,91 +87,7 @@ function Pathfinder() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const generateGraphFromGridNodes = (gridNodes) => {
-        const graph = new Graph();
-        for (let i = 0; i < gridNodes.length; i++) {
-            for (let j = 0; j < gridNodes[i].length; j++) {
-                const node = gridNodes[i][j];
-                if (node.isWall) continue;
-                const { x, y } = node;
-                const key = `${x}-${y}`;
-                const neighbors = [];
-                if (i > 0 && !gridNodes[i - 1][j].isWall) neighbors.push(`${x - 1}-${y}`);
-                if (i < gridNodes.length - 1 && !gridNodes[i + 1][j].isWall) neighbors.push(`${x + 1}-${y}`);
-                if (j > 0 && !gridNodes[i][j - 1].isWall) neighbors.push(`${x}-${y - 1}`);
-                if (j < gridNodes[i].length - 1 && !gridNodes[i][j + 1].isWall) neighbors.push(`${x}-${y + 1}`);
-                graph.adjacencyList[key] = neighbors;
-            }
-        }
-        return graph;
-    }
-
-    function visualize() {
-        // BFS
-        const stepWiseVisited = BFS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWiseVisited;
-        const visited = BFS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode).visited;
-        const stepWisePath = BFS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWisePath;
-
-        // DFS
-        // const stepWiseVisited = DFS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWiseVisited;
-        // const visited = DFS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode).visited;
-        // const stepWisePath = DFS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWisePath;
-
-        // DLS
-        // const DEPTH_LIMIT = 100;
-        // const stepWiseVisited = DLS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode, DEPTH_LIMIT).stepWiseVisited;
-        // const visited = DLS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode, DEPTH_LIMIT).visited;
-        // const stepWisePath = DLS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode, DEPTH_LIMIT).stepWisePath;
-
-        // IDDFS
-        // const DEPTH_LIMIT = 100;
-        // const stepWiseVisited = IDDFS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode, DEPTH_LIMIT).stepWiseVisited;
-        // const visited = IDDFS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode, DEPTH_LIMIT).visited;
-        // const stepWisePath = IDDFS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode, DEPTH_LIMIT).stepWisePath;
-
-        // UCS (Yet to be implemented)
-        // const stepWiseVisited = UCS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWiseVisited;
-        // const visited = UCS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode).visited;
-        // const stepWisePath = UCS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWisePath;
-
-        // BDS (Requires special implementation - so better to remove)
-        // const stepWiseVisited = BDS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWiseVisited;
-        // const visited = BDS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode).visited;
-        // const stepWisePath = BDS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWisePath;
-
-        stepWiseVisited.forEach(visitedStep => {
-            const newGrid = grid.nodes.map((row, i) => {
-                setTimeout(() => {
-                    setGrid({ ...grid, nodes: newGrid })
-                }, 1);
-                return row.map((node, j) => {
-                    const nodeKey = `${node.x}-${node.y}`;
-                    const isVisited = visitedStep.includes(nodeKey);
-                    return { ...node, isVisited };
-                });
-            });
-        });
-
-        let newGrid = grid.nodes;
-        stepWisePath.forEach(pathStep => {
-            newGrid = grid.nodes.map((row, i) => {
-                return row.map((node, j) => {
-                    const nodeKey = `${node.x}-${node.y}`;
-                    const isVisited = visited.has(nodeKey);
-                    const isPath = pathStep.includes(nodeKey);
-                    setTimeout(() => {
-                        setGrid({ ...grid, nodes: newGrid })
-                    }, 10);
-                    if (isPath) {
-                        return { ...node, isPath, isVisited: false };
-                    } else if (isVisited) {
-                        return { ...node, isVisited, isPath: false };
-                    }
-                    return { ...node, isVisited, isPath };
-                });
-            });
-        });
-    }
+    
 
     return (
         <div>
@@ -179,7 +95,6 @@ function Pathfinder() {
             <Commands
                 grid={grid}
                 setGrid={setGrid}
-                visualize={visualize}
             />
             <Grid
                 grid={grid}
