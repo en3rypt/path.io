@@ -7,32 +7,34 @@ import Grid from './Grid'
 // graph
 import { Graph, BFS } from '../lib';
 
+import Commands from './Commands'
+import Stats from './Stats'
 
 function Pathfinder() {
     //grid
     const [grid, setGrid] = useState({
         nodes: [],
-        startNode: `${0}-${0}`,
-        endNode: `${0}-${0}`,
-        nodeWidth: 25,
-        nodeHeight: 25,
-        rows: 0,
-        cols: 0,
+        startNode: {x:0,y:0},
+        endNode:{x:0,y:0},
+        nodeWidth:25,
+        nodeHeight:25,
+        rows:0,
+        cols:0,
+        wallNodes:0,
+        visitedNodes:0,
+        exploredNodes:0,
     })
 
-    const [gridIsSet, setGridIsSet] = useState(false);
-
-    function randomXY(row, col) {
-        const x = Math.floor(Math.random() * row)
-        const y = Math.floor(Math.random() * col)
-        return [x, y]
+    function randomXY(row,col,x1=-1,y1=-1){
+        const x = Math.floor(Math.random()*row)
+        const y = Math.floor(Math.random()*col)
+        return (x == x1 || y == y1) ? randomXY(row,col,x1,y1) : [x,y]
     }
     function populateGrid(row, col, startX, startY, endX, endY) {
 
         var count = 0
         const nodes = []
         for (let i = 0; i < row; i++) {
-
             const currentRow = []
             for (let j = 0; j < col; j++) {
                 count++
@@ -58,28 +60,29 @@ function Pathfinder() {
         function handleResize() {
             const width = window.innerWidth;
             const height = window.innerHeight;
-            const row = Math.max(Math.floor(height / 40) - 3, 3)
-            const col = Math.max(Math.floor(width / 40) - 2, 3)
-            const [startX, startY] = randomXY(row, col)
-            const [endX, endY] = randomXY(row, col)
-            const initialGrid = populateGrid(row, col, startX, startY, endX, endY)
-            // console.log(startX,startY,endX,endY)
+            const row = Math.max(Math.floor(height/40)-3,3)
+            const col = Math.max(Math.floor(width/40)-2,3)
+            const [startX,startY] = randomXY(row,col)
+            const [endX,endY] = randomXY(row,col,startX,startY)
+            const initialGrid = populateGrid(row,col,startX,startY,endX,endY)
             setGrid({
-                ...grid,
-                rows: row,
-                cols: col,
                 nodes: initialGrid,
-                startNode: `${startX}-${startY}`,
-                endNode: `${endX}-${endY}`,
+                startNode: {x:startX,y:startY},
+                endNode: {x:endX,y:endY},
+                nodeWidth:40,
+                nodeHeight:40,
+                rows:row,
+                cols:col
             })
-            setGridIsSet(true);
+            setIsGrid(true);
         }
+        
         handleResize()
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const generateAdjacencyList = (grid) => {
+   const generateAdjacencyList = (grid) => {
         const adjacencyList = {};
         for (let i = 0; i < grid.length; i++) {
             for (let j = 0; j < grid[i].length; j++) {
@@ -138,16 +141,17 @@ function Pathfinder() {
 
     return (
         <div>
-            <Grid
-                grid={grid.nodes}
+            <Stats grid={grid}/>
+            <Commands 
+                grid={grid}
+                setGrid={setGrid}    
+            />
+            <Grid 
+                grid={grid}
                 setGrid={setGrid}
-                rows={grid.rows}
-                cols={grid.cols}
-                nodeHeight={grid.nodeHeight}
-                nodeWidth={grid.nodeWidth}
             />
         </div>
-    )
+   )
 }
 
 export default Pathfinder
