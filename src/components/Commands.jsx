@@ -18,7 +18,7 @@ function Commands(props) {
     }
 
     function visualize(){
-        console.log(props.grid)
+        props.visualize();
     }
 
     return (

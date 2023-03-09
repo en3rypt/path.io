@@ -8,6 +8,7 @@ const BFS = (graph, start, end) => {
 
     while (queue.length > 0) {
         const node = queue.shift();
+        const nodeString = `${node.x}-${node.y}`;
         const neighbors = graph[node];
 
         for (let neighbor of neighbors) {

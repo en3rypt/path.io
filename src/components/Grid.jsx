@@ -47,6 +47,7 @@ function Grid(props) {
           ...props.grid,
           nodes: props.grid.nodes.map((row, rowIndex) => {
             return row.map((col, colIndex) => {
+
               if (rowIndex == node.x && colIndex == node.y) {
                 return {
                   ...col,
@@ -95,14 +96,15 @@ function Grid(props) {
       ...props.grid,
       nodes: props.grid.nodes.map((row, rowIndex) => {
         return row.map((col, colIndex) => {
+          
           if (rowIndex === node.x && colIndex === node.y && node.isWall === false && !node.isStartNode && !node.isEndNode) {
             return {
               ...col,
-              isWall: !col.isWall
+               isWall: !col.isWall
             }
           }
+          return col
         })
-        return col
       })
     })
 
@@ -118,13 +120,13 @@ function Grid(props) {
     if (node.isWall) {
       classname += "bg-stone-500  animate-wallAnimation"
     }
+    if (node.isVisited) {
+      classname += "bg-blue-500 animate-wallAnimation"
+    }
     if (node.isPath) {
       classname += "bg-cyan-400 animate-wallAnimation"
     }
 
-    if (node.isVisited) {
-      classname += "bg-cyan-500 animate-wallAnimation"
-    }
 
     return classname
   }

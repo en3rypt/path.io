@@ -76,10 +76,12 @@ function Pathfinder() {
                 rows: row,
                 cols: col
             })
-            setGridIsSet(true);
+            // setGridIsSet(true);
+
         }
 
         handleResize()
+
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
@@ -120,12 +122,14 @@ function Pathfinder() {
     }
 
 
-    if (gridIsSet) {
+    function visualize() {
         const pathNodes = getNodesToColorFromBFS(
             BFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).addedToQueueBy, grid.endNode
         )
 
         const visitedNodes = BFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).visited
+
+        console.log(pathNodes)
 
         const newGrid = grid.nodes.map((row, i) => {
             return row.map((node, j) => {
@@ -136,17 +140,18 @@ function Pathfinder() {
             });
         });
         setGrid({ ...grid, nodes: newGrid })
-        setGridIsSet(false);
+        // setGridIsSet(false);
     }
 
 
-
+    console.log(grid)
     return (
         <div>
             <Stats grid={grid} />
             <Commands
                 grid={grid}
                 setGrid={setGrid}
+                visualize={visualize}
             />
             <Grid
                 grid={grid}
