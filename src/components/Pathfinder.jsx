@@ -88,22 +88,21 @@ function Pathfinder() {
     }, []);
 
     const generateGraphFromGridNodes = (gridNodes) => {
-        const adjacencyList = {};
+        const graph = new Graph();
         for (let i = 0; i < gridNodes.length; i++) {
             for (let j = 0; j < gridNodes[i].length; j++) {
                 const node = gridNodes[i][j];
+                if (node.isWall) continue;
                 const { x, y } = node;
                 const key = `${x}-${y}`;
                 const neighbors = [];
-                if (i > 0) neighbors.push(`${x - 1}-${y}`);
-                if (i < gridNodes.length - 1) neighbors.push(`${x + 1}-${y}`);
-                if (j > 0) neighbors.push(`${x}-${y - 1}`);
-                if (j < gridNodes[i].length - 1) neighbors.push(`${x}-${y + 1}`);
-                adjacencyList[key] = neighbors;
+                if (i > 0 && !gridNodes[i - 1][j].isWall) neighbors.push(`${x - 1}-${y}`);
+                if (i < gridNodes.length - 1 && !gridNodes[i + 1][j].isWall) neighbors.push(`${x + 1}-${y}`);
+                if (j > 0 && !gridNodes[i][j - 1].isWall) neighbors.push(`${x}-${y - 1}`);
+                if (j < gridNodes[i].length - 1 && !gridNodes[i][j + 1].isWall) neighbors.push(`${x}-${y + 1}`);
+                graph.adjacencyList[key] = neighbors;
             }
         }
-        const graph = new Graph()
-        graph.adjacencyList = adjacencyList;
         return graph;
     }
 
@@ -158,6 +157,7 @@ function Pathfinder() {
         });
     }
 
+    console.log(grid)
     return (
         <div>
             <Stats grid={grid} />
