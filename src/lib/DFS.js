@@ -28,31 +28,30 @@ const DFS = (graphNodes, start, end) => {
     const stack = [startString];
     const addedToStackBy = {};
     const visited = new Set();
-    visited.add(startString);
+
+    stepWiseVisited.push([...visited]);
 
     while (stack.length > 0) {
         const node = stack.pop();
-        const neighbors = graphNodes[node];
+        if (visited.has(node)) continue;
+        visited.add(node);
+        stepWiseVisited.push([...visited]);
 
+        if (node === endString) {
+            const pathTaken = pathNodes(addedToStackBy, end);
+            return { pathExists: true, pathTaken, visited, stepWiseVisited, stepWisePath: toStepWisePath(pathTaken) };
+        }
+
+        const neighbors = graphNodes[node];
         for (let neighbor of neighbors) {
 
-            if (neighbor === endString) {
-                addedToStackBy[neighbor] = node;
-                visited.add(neighbor);
-                stepWiseVisited.push([...visited]);
-                const pathTaken = pathNodes(addedToStackBy, end);
-
-                return { pathExists: true, pathTaken, visited, stepWiseVisited, stepWisePath: toStepWisePath(pathTaken) };
-            }
-
             if (!visited.has(neighbor)) {
-                visited.add(neighbor);
                 addedToStackBy[neighbor] = node;
                 stack.push(neighbor);
             }
         }
-        stepWiseVisited.push([...visited]);
     }
+    return { pathExists: false, pathTaken: [], visited, stepWiseVisited, stepWisePath: [] };
 };
 
 

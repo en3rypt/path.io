@@ -5,7 +5,7 @@ import Grid from './Grid'
 
 
 // graph
-import { Graph, BFS, DFS } from '../lib';
+import { Graph, BFS, DFS, DLS } from '../lib';
 
 import Commands from './Commands'
 import Stats from './Stats'
@@ -125,12 +125,24 @@ function Pathfinder() {
 
 
     function visualize() {
-        // const stepWiseVisited = DFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWiseVisited;
-        // const visited = DFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).visited;
-        // const stepWisePath = DFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWisePath;
+        // BFS
         const stepWiseVisited = BFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWiseVisited;
         const visited = BFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).visited;
         const stepWisePath = BFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWisePath;
+
+        // DFS
+        // const stepWiseVisited = DFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWiseVisited;
+        // const visited = DFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).visited;
+        // const stepWisePath = DFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWisePath;
+
+        // DLS
+        // const DEPTH_LIMIT = 100;
+        // const stepWiseVisited = DLS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode, DEPTH_LIMIT).stepWiseVisited;
+        // const visited = DLS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode, DEPTH_LIMIT).visited;
+        // const stepWisePath = DLS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode, DEPTH_LIMIT).stepWisePath;
+
+
+
 
         stepWiseVisited.forEach(visitedStep => {
             const newGrid = grid.nodes.map((row, i) => {
