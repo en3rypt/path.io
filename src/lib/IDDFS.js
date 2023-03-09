@@ -54,4 +54,18 @@ const DLS = (graphNodes, start, end, limit) => {
 };
 
 
-export default DLS;
+const IDDFS = (graphNodes, start, end, maxDepth) => {
+
+    const stepWiseVisited = [];
+    for (let depth = 0; depth <= maxDepth; depth++) {
+        const result = DLS(graphNodes, start, end, depth);
+        stepWiseVisited.push(...result.stepWiseVisited);
+        result.stepWiseVisited = stepWiseVisited;
+        if (result.pathExists) {
+            return result;
+        }
+    }
+    return { pathExists: false, pathTaken: [], visited: new Set(), stepWiseVisited: [], stepWisePath: [] };
+};
+
+export default IDDFS;

@@ -5,7 +5,7 @@ import Grid from './Grid'
 
 
 // graph
-import { Graph, BFS, DFS, DLS } from '../lib';
+import { Graph, BFS, DFS, DLS, IDDFS, BDS } from '../lib';
 
 import Commands from './Commands'
 import Stats from './Stats'
@@ -123,6 +123,22 @@ function Pathfinder() {
         // const visited = DLS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode, DEPTH_LIMIT).visited;
         // const stepWisePath = DLS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode, DEPTH_LIMIT).stepWisePath;
 
+        // IDDFS
+        // const DEPTH_LIMIT = 100;
+        // const stepWiseVisited = IDDFS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode, DEPTH_LIMIT).stepWiseVisited;
+        // const visited = IDDFS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode, DEPTH_LIMIT).visited;
+        // const stepWisePath = IDDFS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode, DEPTH_LIMIT).stepWisePath;
+
+        // UCS (Yet to be implemented)
+        // const stepWiseVisited = UCS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWiseVisited;
+        // const visited = UCS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode).visited;
+        // const stepWisePath = UCS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWisePath;
+
+        // BDS (Requires special implementation - so better to remove)
+        // const stepWiseVisited = BDS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWiseVisited;
+        // const visited = BDS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode).visited;
+        // const stepWisePath = BDS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWisePath;
+
         stepWiseVisited.forEach(visitedStep => {
             const newGrid = grid.nodes.map((row, i) => {
                 setTimeout(() => {
@@ -157,7 +173,6 @@ function Pathfinder() {
         });
     }
 
-    console.log(grid)
     return (
         <div>
             <Stats grid={grid} />
