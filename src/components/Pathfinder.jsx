@@ -5,7 +5,7 @@ import Grid from './Grid'
 
 
 // graph
-import { Graph, BFS } from '../lib';
+import { Graph, BFS, DFS } from '../lib';
 
 import Commands from './Commands'
 import Stats from './Stats'
@@ -14,21 +14,23 @@ function Pathfinder() {
     //grid
     const [grid, setGrid] = useState({
         nodes: [],
-        startNode: {x:0,y:0},
-        endNode:{x:0,y:0},
-        nodeWidth:25,
-        nodeHeight:25,
-        rows:0,
-        cols:0,
-        wallNodes:0,
-        visitedNodes:0,
-        exploredNodes:0,
+        startNode: { x: 0, y: 0 },
+        endNode: { x: 0, y: 0 },
+        nodeWidth: 25,
+        nodeHeight: 25,
+        rows: 0,
+        cols: 0,
+        wallNodes: 0,
+        visitedNodes: 0,
+        exploredNodes: 0,
     })
 
-    function randomXY(row,col,x1=-1,y1=-1){
-        const x = Math.floor(Math.random()*row)
-        const y = Math.floor(Math.random()*col)
-        return (x == x1 || y == y1) ? randomXY(row,col,x1,y1) : [x,y]
+    const [gridIsSet, setGridIsSet] = useState(false)
+
+    function randomXY(row, col, x1 = -1, y1 = -1) {
+        const x = Math.floor(Math.random() * row)
+        const y = Math.floor(Math.random() * col)
+        return (x == x1 || y == y1) ? randomXY(row, col, x1, y1) : [x, y]
     }
     function populateGrid(row, col, startX, startY, endX, endY) {
 
@@ -60,40 +62,43 @@ function Pathfinder() {
         function handleResize() {
             const width = window.innerWidth;
             const height = window.innerHeight;
-            const row = Math.max(Math.floor(height/40)-3,3)
-            const col = Math.max(Math.floor(width/40)-2,3)
-            const [startX,startY] = randomXY(row,col)
-            const [endX,endY] = randomXY(row,col,startX,startY)
-            const initialGrid = populateGrid(row,col,startX,startY,endX,endY)
+            // const [row, col] = [5, 5];
+            const row = Math.max(Math.floor(height / 40) - 3, 3)
+            const col = Math.max(Math.floor(width / 40) - 2, 3)
+            const [startX, startY] = randomXY(row, col)
+            const [endX, endY] = randomXY(row, col, startX, startY)
+            const initialGrid = populateGrid(row, col, startX, startY, endX, endY)
             setGrid({
                 nodes: initialGrid,
-                startNode: {x:startX,y:startY},
-                endNode: {x:endX,y:endY},
-                nodeWidth:40,
-                nodeHeight:40,
-                rows:row,
-                cols:col
+                startNode: { x: startX, y: startY },
+                endNode: { x: endX, y: endY },
+                nodeWidth: 40,
+                nodeHeight: 40,
+                rows: row,
+                cols: col
             })
-            setIsGrid(true);
+            // setGridIsSet(true);
+
         }
-        
+
         handleResize()
+
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-   const generateAdjacencyList = (grid) => {
+    const generateAdjacencyList = (gridNodes) => {
         const adjacencyList = {};
-        for (let i = 0; i < grid.length; i++) {
-            for (let j = 0; j < grid[i].length; j++) {
-                const node = grid[i][j];
+        for (let i = 0; i < gridNodes.length; i++) {
+            for (let j = 0; j < gridNodes[i].length; j++) {
+                const node = gridNodes[i][j];
                 const { x, y } = node;
                 const key = `${x}-${y}`;
                 const neighbors = [];
                 if (i > 0) neighbors.push(`${x - 1}-${y}`);
-                if (i < grid.length - 1) neighbors.push(`${x + 1}-${y}`);
+                if (i < gridNodes.length - 1) neighbors.push(`${x + 1}-${y}`);
                 if (j > 0) neighbors.push(`${x}-${y - 1}`);
-                if (j < grid[i].length - 1) neighbors.push(`${x}-${y + 1}`);
+                if (j < gridNodes[i].length - 1) neighbors.push(`${x}-${y + 1}`);
                 adjacencyList[key] = neighbors;
             }
         }
@@ -109,7 +114,8 @@ function Pathfinder() {
 
     const getNodesToColorFromBFS = (addedToQueueBy, endNode) => {
         const nodesToColor = [];
-        let currentNode = endNode;
+        const endString = `${endNode.x}-${endNode.y}`;
+        let currentNode = endString;
         while (currentNode) {
             nodesToColor.unshift(currentNode);
             currentNode = addedToQueueBy[currentNode];
@@ -118,40 +124,81 @@ function Pathfinder() {
     }
 
 
-    if (gridIsSet) {
-        const pathNodes = getNodesToColorFromBFS(
-            BFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).addedToQueueBy, grid.endNode
-        )
+    function visualize() {
+        // const stepWiseVisited = DFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWiseVisited;
+        // const visited = DFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).visited;
+        // const stepWisePath = DFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWisePath;
+        const stepWiseVisited = BFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWiseVisited;
+        const visited = BFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).visited;
+        const stepWisePath = BFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWisePath;
 
-        const visitedNodes = BFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).visited
-
-        const newGrid = grid.nodes.map((row, i) => {
-            return row.map((node, j) => {
-                const nodeKey = `${node.x}-${node.y}`;
-                const isVisited = visitedNodes.has(nodeKey);
-                const isPath = pathNodes.includes(nodeKey);
-                return { ...node, isVisited, isPath };
+        stepWiseVisited.forEach(visitedStep => {
+            const newGrid = grid.nodes.map((row, i) => {
+                setTimeout(() => {
+                    setGrid({ ...grid, nodes: newGrid })
+                }, 1);
+                return row.map((node, j) => {
+                    const nodeKey = `${node.x}-${node.y}`;
+                    const isVisited = visitedStep.includes(nodeKey);
+                    return { ...node, isVisited };
+                });
             });
         });
-        setGrid({ ...grid, nodes: newGrid })
-        setGridIsSet(false);
+
+        // change only the path nodes stepwise to isPath: true while keeping the visited nodes as isVisited: true and updating the grid
+        let newGrid = grid.nodes;
+        stepWisePath.forEach(pathStep => {
+            newGrid = grid.nodes.map((row, i) => {
+                return row.map((node, j) => {
+                    const nodeKey = `${node.x}-${node.y}`;
+                    const isVisited = visited.has(nodeKey);
+                    const isPath = pathStep.includes(nodeKey);
+                    setTimeout(() => {
+                        setGrid({ ...grid, nodes: newGrid })
+                    }, 10);
+                    if (isPath) {
+                        return { ...node, isPath, isVisited: false };
+                    } else if (isVisited) {
+                        return { ...node, isVisited, isPath: false };
+                    }
+                    return { ...node, isVisited, isPath };
+                });
+            });
+        });
+
+        // const newGrid = grid.nodes.map((row, i) => {
+        //     return row.map((node, j) => {
+        //         const nodeKey = `${node.x}-${node.y}`;
+        //         const isPath = pathNodes.includes(nodeKey);
+        //         const isVisited = visitedNodes.has(nodeKey);
+        //         if (isPath) {
+        //             return { ...node, isPath, isVisited: false };
+        //         } else if (isVisited) {
+        //             return { ...node, isVisited, isPath: false };
+        //         }
+
+
+        //         return { ...node, isVisited, isPath };
+        //     });
+        // });
+        // setGrid({ ...grid, nodes: newGrid })
+        // setGridIsSet(false);
     }
-
-
 
     return (
         <div>
-            <Stats grid={grid}/>
-            <Commands 
+            <Stats grid={grid} />
+            <Commands
                 grid={grid}
-                setGrid={setGrid}    
+                setGrid={setGrid}
+                visualize={visualize}
             />
-            <Grid 
+            <Grid
                 grid={grid}
                 setGrid={setGrid}
             />
         </div>
-   )
+    )
 }
 
 export default Pathfinder
