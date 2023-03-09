@@ -20,19 +20,18 @@ const toStepWisePath = (pathTaken) => {
     return stepWisePath;
 }
 
-
-const DFS = (graphNodes, start, end) => {
+const DLS = (graphNodes, start, end, limit) => {
     const startString = `${start.x}-${start.y}`;
     const endString = `${end.x}-${end.y}`;
     const stepWiseVisited = [];
-    const stack = [startString];
+    const stack = [{ node: startString, path: [startString] }];
     const addedToStackBy = {};
     const visited = new Set();
 
     stepWiseVisited.push([...visited]);
 
     while (stack.length > 0) {
-        const node = stack.pop();
+        const { node, path } = stack.pop();
         if (visited.has(node)) continue;
         visited.add(node);
         stepWiseVisited.push([...visited]);
@@ -45,9 +44,9 @@ const DFS = (graphNodes, start, end) => {
         const neighbors = graphNodes[node];
         for (let neighbor of neighbors) {
 
-            if (!visited.has(neighbor)) {
+            if (!visited.has(neighbor) && path.length < limit) {
                 addedToStackBy[neighbor] = node;
-                stack.push(neighbor);
+                stack.push({ node: neighbor, path: [...path, neighbor] });
             }
         }
     }
@@ -55,4 +54,18 @@ const DFS = (graphNodes, start, end) => {
 };
 
 
-export default DFS;
+const IDDFS = (graphNodes, start, end, maxDepth) => {
+
+    const stepWiseVisited = [];
+    for (let depth = 0; depth <= maxDepth; depth++) {
+        const result = DLS(graphNodes, start, end, depth);
+        stepWiseVisited.push(...result.stepWiseVisited);
+        result.stepWiseVisited = stepWiseVisited;
+        if (result.pathExists) {
+            return result;
+        }
+    }
+    return { pathExists: false, pathTaken: [], visited: new Set(), stepWiseVisited: [], stepWisePath: [] };
+};
+
+export default IDDFS;

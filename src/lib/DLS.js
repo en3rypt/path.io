@@ -20,39 +20,38 @@ const toStepWisePath = (pathTaken) => {
     return stepWisePath;
 }
 
-
-const DLS = (graphNodes, start, goal, limit) => {
+const DLS = (graphNodes, start, end, limit) => {
     const startString = `${start.x}-${start.y}`;
-    const endString = `${goal.x}-${goal.y}`;
+    const endString = `${end.x}-${end.y}`;
     const stepWiseVisited = [];
     const stack = [{ node: startString, path: [startString] }];
     const addedToStackBy = {};
     const visited = new Set();
-    visited.add(startString);
+
+    stepWiseVisited.push([...visited]);
 
     while (stack.length > 0) {
         const { node, path } = stack.pop();
-        const neighbors = graphNodes[node];
+        if (visited.has(node)) continue;
+        visited.add(node);
+        stepWiseVisited.push([...visited]);
 
+        if (node === endString) {
+            const pathTaken = pathNodes(addedToStackBy, end);
+            return { pathExists: true, pathTaken, visited, stepWiseVisited, stepWisePath: toStepWisePath(pathTaken) };
+        }
+
+        const neighbors = graphNodes[node];
         for (let neighbor of neighbors) {
-            if (neighbor === endString) {
-                addedToStackBy[neighbor] = node;
-                visited.add(neighbor);
-                stepWiseVisited.push([...visited]);
-                const pathTaken = pathNodes(addedToStackBy, goal);
-                return { pathExists: true, path: [...path, neighbor], visited, stepWiseVisited, stepWisePath: toStepWisePath(pathTaken) };
-            }
 
             if (!visited.has(neighbor) && path.length < limit) {
-                visited.add(neighbor);
                 addedToStackBy[neighbor] = node;
                 stack.push({ node: neighbor, path: [...path, neighbor] });
             }
         }
-        stepWiseVisited.push([...visited]);
     }
-
-    return { pathExists: false, path: [], visited, stepWiseVisited, stepWisePath: [] };
+    return { pathExists: false, pathTaken: [], visited, stepWiseVisited, stepWisePath: [] };
 };
+
 
 export default DLS;

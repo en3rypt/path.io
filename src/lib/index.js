@@ -2,5 +2,7 @@ import Graph from "./Graph";
 import BFS from "./BFS";
 import DFS from "./DFS";
 import DLS from "./DLS";
+import IDDFS from "./IDDFS";
+import BDS from "./BDS";
 
-export { Graph, BFS, DFS, DLS };
+export { Graph, BFS, DFS, DLS, IDDFS, BDS };
