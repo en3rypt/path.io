@@ -87,7 +87,7 @@ function Pathfinder() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    const generateAdjacencyList = (gridNodes) => {
+    const generateGraphFromGridNodes = (gridNodes) => {
         const adjacencyList = {};
         for (let i = 0; i < gridNodes.length; i++) {
             for (let j = 0; j < gridNodes[i].length; j++) {
@@ -102,47 +102,27 @@ function Pathfinder() {
                 adjacencyList[key] = neighbors;
             }
         }
-        return adjacencyList;
-    }
-
-    const generateGraph = (grid) => {
-        const adjacencyList = generateAdjacencyList(grid)
         const graph = new Graph()
         graph.adjacencyList = adjacencyList;
         return graph;
     }
 
-    const getNodesToColorFromBFS = (addedToQueueBy, endNode) => {
-        const nodesToColor = [];
-        const endString = `${endNode.x}-${endNode.y}`;
-        let currentNode = endString;
-        while (currentNode) {
-            nodesToColor.unshift(currentNode);
-            currentNode = addedToQueueBy[currentNode];
-        }
-        return nodesToColor;
-    }
-
-
     function visualize() {
         // BFS
-        const stepWiseVisited = BFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWiseVisited;
-        const visited = BFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).visited;
-        const stepWisePath = BFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWisePath;
+        const stepWiseVisited = BFS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWiseVisited;
+        const visited = BFS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode).visited;
+        const stepWisePath = BFS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWisePath;
 
         // DFS
-        // const stepWiseVisited = DFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWiseVisited;
-        // const visited = DFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).visited;
-        // const stepWisePath = DFS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWisePath;
+        // const stepWiseVisited = DFS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWiseVisited;
+        // const visited = DFS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode).visited;
+        // const stepWisePath = DFS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode).stepWisePath;
 
         // DLS
         // const DEPTH_LIMIT = 100;
-        // const stepWiseVisited = DLS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode, DEPTH_LIMIT).stepWiseVisited;
-        // const visited = DLS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode, DEPTH_LIMIT).visited;
-        // const stepWisePath = DLS(generateGraph(grid.nodes).adjacencyList, grid.startNode, grid.endNode, DEPTH_LIMIT).stepWisePath;
-
-
-
+        // const stepWiseVisited = DLS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode, DEPTH_LIMIT).stepWiseVisited;
+        // const visited = DLS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode, DEPTH_LIMIT).visited;
+        // const stepWisePath = DLS(generateGraphFromGridNodes(grid.nodes).adjacencyList, grid.startNode, grid.endNode, DEPTH_LIMIT).stepWisePath;
 
         stepWiseVisited.forEach(visitedStep => {
             const newGrid = grid.nodes.map((row, i) => {
@@ -157,7 +137,6 @@ function Pathfinder() {
             });
         });
 
-        // change only the path nodes stepwise to isPath: true while keeping the visited nodes as isVisited: true and updating the grid
         let newGrid = grid.nodes;
         stepWisePath.forEach(pathStep => {
             newGrid = grid.nodes.map((row, i) => {
@@ -177,24 +156,6 @@ function Pathfinder() {
                 });
             });
         });
-
-        // const newGrid = grid.nodes.map((row, i) => {
-        //     return row.map((node, j) => {
-        //         const nodeKey = `${node.x}-${node.y}`;
-        //         const isPath = pathNodes.includes(nodeKey);
-        //         const isVisited = visitedNodes.has(nodeKey);
-        //         if (isPath) {
-        //             return { ...node, isPath, isVisited: false };
-        //         } else if (isVisited) {
-        //             return { ...node, isVisited, isPath: false };
-        //         }
-
-
-        //         return { ...node, isVisited, isPath };
-        //     });
-        // });
-        // setGrid({ ...grid, nodes: newGrid })
-        // setGridIsSet(false);
     }
 
     return (
