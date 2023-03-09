@@ -3,6 +3,8 @@ import React,{useState,useEffect} from 'react'
 //components
 import Grid from './Grid'
 import Commands from './Commands'
+import Stats from './Stats'
+
 function Pathfinder() {
     //grid
     const [grid, setGrid] = useState({
@@ -12,18 +14,16 @@ function Pathfinder() {
         nodeWidth:25,
         nodeHeight:25,
         rows:0,
-        cols:0
+        cols:0,
+        wallNodes:0,
+        visitedNodes:0,
+        exploredNodes:0,
     })
 
     function randomXY(row,col,x1=-1,y1=-1){
         const x = Math.floor(Math.random()*row)
         const y = Math.floor(Math.random()*col)
-        while(x === x1 && y === y1){
-            const x = Math.floor(Math.random()*row)
-            const y = Math.floor(Math.random()*col)
-        }
-
-        return [x,y]
+        return (x == x1 || y == y1) ? randomXY(row,col,x1,y1) : [x,y]
     }
     function populateGrid(row,col,startX,startY,endX,endY){
         
@@ -57,7 +57,7 @@ function Pathfinder() {
             const row = Math.max(Math.floor(height/40)-3,3)
             const col = Math.max(Math.floor(width/40)-2,3)
             const [startX,startY] = randomXY(row,col)
-            const [endX,endY] = randomXY(row,col)
+            const [endX,endY] = randomXY(row,col,startX,startY)
             const initialGrid = populateGrid(row,col,startX,startY,endX,endY)
             setGrid({
                 nodes: initialGrid,
@@ -78,6 +78,7 @@ function Pathfinder() {
     console.log(grid)
     return (
         <div>
+            <Stats grid={grid}/>
             <Commands 
                 grid={grid}
                 setGrid={setGrid}    
@@ -85,10 +86,6 @@ function Pathfinder() {
             <Grid 
                 grid={grid}
                 setGrid={setGrid}
-                rows={grid.rows} 
-                cols={grid.cols} 
-                nodeHeight= {grid.nodeHeight} 
-                nodeWidth={grid.nodeWidth}
             />
         </div>
   )

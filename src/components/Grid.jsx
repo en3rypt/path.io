@@ -122,7 +122,7 @@ function Grid(props) {
   }
 
   return (
-    <div>
+    <div className='py-5'>
       {
         props.grid.nodes.map((row, rowIndex) => {
           return (
