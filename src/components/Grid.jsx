@@ -4,55 +4,55 @@ import React, { useState } from 'react'
 function Grid(props) {
   const [mouseDown, setMouseDown] = useState(false)
   const [wallSelcted, setWallSelected] = useState(false)
-  const [endNodeMove,setendNodeMove] = useState(false)
-  const [startNodeMove,setstartNodeMove] = useState(false)
-  function handleMouseDown(node){
-    if(node.isEndNode){
+  const [endNodeMove, setendNodeMove] = useState(false)
+  const [startNodeMove, setstartNodeMove] = useState(false)
+  function handleMouseDown(node) {
+    if (node.isEndNode) {
       setendNodeMove(true)
       return
-    }else if(node.isStartNode){
+    } else if (node.isStartNode) {
       setstartNodeMove(true)
       return
     }
-    if(node.isWall){
+    if (node.isWall) {
       setWallSelected(true)
-    }else{
+    } else {
       setWallSelected(false)
     }
-    
+
     node.isWall = !node.isWall
     setMouseDown(true)
   }
-  function handleMouseUp(node){
+  function handleMouseUp(node) {
     setMouseDown(false)
-    if(startNodeMove){
+    if (startNodeMove) {
       props.setGrid({
         ...props.grid,
-        startNode: {x:node.x,y:node.y}
+        startNode: { x: node.x, y: node.y }
       })
       setstartNodeMove(false)
     }
-    if(endNodeMove){
+    if (endNodeMove) {
       props.setGrid({
         ...props.grid,
-        endNode: {x:node.x,y:node.y}
+        endNode: { x: node.x, y: node.y }
       })
-    setendNodeMove(false)
+      setendNodeMove(false)
     }
   }
-  function handleMouseOver(node){
-    if(endNodeMove){
-      if(!node.isWall && !node.isStartNode){
+  function handleMouseOver(node) {
+    if (endNodeMove) {
+      if (!node.isWall && !node.isStartNode) {
         props.setGrid({
           ...props.grid,
-          nodes: props.grid.nodes.map((row,rowIndex)=>{
-            return row.map((col,colIndex)=>{
-              if(rowIndex == node.x && colIndex == node.y){
+          nodes: props.grid.nodes.map((row, rowIndex) => {
+            return row.map((col, colIndex) => {
+              if (rowIndex == node.x && colIndex == node.y) {
                 return {
                   ...col,
                   isEndNode: true
                 }
-              }else{
+              } else {
                 return {
                   ...col,
                   isEndNode: false
@@ -61,22 +61,22 @@ function Grid(props) {
             })
           })
         })
-        
+
       }
       return
     }
-    if(startNodeMove){
-      if(!node.isWall && !node.isEndNode){
+    if (startNodeMove) {
+      if (!node.isWall && !node.isEndNode) {
         props.setGrid({
           ...props.grid,
-          nodes: props.grid.nodes.map((row,rowIndex)=>{
-            return row.map((col,colIndex)=>{
-              if(rowIndex == node.x && colIndex == node.y){
+          nodes: props.grid.nodes.map((row, rowIndex) => {
+            return row.map((col, colIndex) => {
+              if (rowIndex == node.x && colIndex == node.y) {
                 return {
                   ...col,
                   isStartNode: true
                 }
-              }else{
+              } else {
                 return {
                   ...col,
                   isStartNode: false
@@ -85,25 +85,24 @@ function Grid(props) {
             })
           })
         })
-        
+
       }
       return
     }
 
     if (!mouseDown) return;
-      props.setGrid({
-        ...props.grid,
-        nodes: props.grid.nodes.map((row,rowIndex)=>{
-          return row.map((col,colIndex)=>{
-            if(rowIndex === node.x && colIndex === node.y && node.isWall === false && !node.isStartNode && !node.isEndNode ){
-              return {
-                ...col,
-                isWall: !col.isWall
-              }
+    props.setGrid({
+      ...props.grid,
+      nodes: props.grid.nodes.map((row, rowIndex) => {
+        return row.map((col, colIndex) => {
+          if (rowIndex === node.x && colIndex === node.y && node.isWall === false && !node.isStartNode && !node.isEndNode) {
+            return {
+              ...col,
+              isWall: !col.isWall
             }
           }
-          return col
         })
+        return col
       })
     })
 
@@ -141,13 +140,13 @@ function Grid(props) {
                   return (
                     <div
                       key={`node-${rowIndex}-${colIndex}`}
-                      className={getClassName(node)} 
-                      onMouseDown={()=>{handleMouseDown(node)}} 
-                      onMouseUp={()=>{handleMouseUp(node)}} 
-                      onMouseOver={()=>{handleMouseOver(node)}}
-                      // onTouchStart={()=>{handleMouseDown(node)}}
-                      // onTouchMove={()=>{handleMouseOver(node)}}
-                      // onTouchEnd={handleMouseUp}
+                      className={getClassName(node)}
+                      onMouseDown={() => { handleMouseDown(node) }}
+                      onMouseUp={() => { handleMouseUp(node) }}
+                      onMouseOver={() => { handleMouseOver(node) }}
+                    // onTouchStart={()=>{handleMouseDown(node)}}
+                    // onTouchMove={()=>{handleMouseOver(node)}}
+                    // onTouchEnd={handleMouseUp}
                     />
                   );
                 })
@@ -159,5 +158,4 @@ function Grid(props) {
     </div>
   )
 }
-
 export default Grid

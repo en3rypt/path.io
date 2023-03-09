@@ -1,8 +1,10 @@
 const BFS = (graph, start, end) => {
-    const queue = [start];
+    const startString = `${start.x}-${start.y}`;
+    const endString = `${end.x}-${end.y}`;
+    const queue = [startString];
     const addedToQueueBy = {};
     const visited = new Set();
-    visited.add(start);
+    visited.add(startString);
 
     while (queue.length > 0) {
         const node = queue.shift();
@@ -10,7 +12,7 @@ const BFS = (graph, start, end) => {
 
         for (let neighbor of neighbors) {
 
-            if (neighbor === end) {
+            if (neighbor === endString) {
                 addedToQueueBy[neighbor] = node;
                 visited.add(neighbor);
                 return { pathExists: true, addedToQueueBy, visited };
