@@ -10,7 +10,11 @@ import { Graph, BFS, DFS, DLS, IDDFS, BDS } from '../lib';
 import Commands from './Commands'
 import Stats from './Stats'
 
+let rerenderCount = 0;
+
 function Pathfinder() {
+    console.log('rerender count: ', rerenderCount++)
+
     //grid
     const [grid, setGrid] = useState({
         nodes: [],
@@ -24,8 +28,6 @@ function Pathfinder() {
         visitedNodes: 0,
         exploredNodes: 0,
     })
-
-    const [gridIsSet, setGridIsSet] = useState(false)
 
     function randomXY(row, col, x1 = -1, y1 = -1) {
         const x = Math.floor(Math.random() * row)
@@ -77,7 +79,6 @@ function Pathfinder() {
                 rows: row,
                 cols: col
             })
-            // setGridIsSet(true);
 
         }
 
@@ -87,7 +88,8 @@ function Pathfinder() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    console.log(grid.rows*grid.cols)
+
+    console.log(grid.rows, grid.cols, grid.startNode, grid.endNode, grid.nodes.length, grid.nodes);
 
     return (
         <div>

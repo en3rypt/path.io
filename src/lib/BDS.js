@@ -44,7 +44,7 @@ const BDS = (graphNodes, start, end) => {
             if (visited2.has(neighbor)) {
                 visited.add(neighbor);
                 addedToQueueBy[neighbor] = node;
-                stepWiseVisited.push([...visited]);
+                stepWiseVisited.push([...visited, ...visited2]);
                 const pathTaken = pathNodes(addedToQueueBy, end);
 
                 return { pathExists: true, pathTaken, visited, stepWiseVisited, stepWisePath: toStepWisePath(pathTaken) };
@@ -56,7 +56,7 @@ const BDS = (graphNodes, start, end) => {
                 queue.push(neighbor);
             }
         }
-        stepWiseVisited.push([...visited]);
+        stepWiseVisited.push([...visited, ...visited2]);
 
         const node2 = queue2.shift();
         const neighbors2 = graphNodes[node2];
@@ -66,7 +66,7 @@ const BDS = (graphNodes, start, end) => {
             if (visited.has(neighbor2)) {
                 visited2.add(neighbor2);
                 addedToQueueBy2[neighbor2] = node2;
-                stepWiseVisited.push([...visited2]);
+                stepWiseVisited.push([...visited2, ...visited]);
                 const pathTaken = pathNodes(addedToQueueBy2, end);
 
                 return { pathExists: true, pathTaken, visited, stepWiseVisited, stepWisePath: toStepWisePath(pathTaken) };
@@ -78,7 +78,7 @@ const BDS = (graphNodes, start, end) => {
                 queue2.push(neighbor2);
             }
         }
-        stepWiseVisited.push([...visited2]);
+        stepWiseVisited.push([...visited2, ...visited]);
     }
 
     return { pathExists: false, addedToQueueBy, visited, stepWiseVisited };
