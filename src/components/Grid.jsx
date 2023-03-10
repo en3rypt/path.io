@@ -6,6 +6,7 @@ function Grid(props) {
   const [wallSelected, setWallSelected] = useState(false)
   const [endNodeMove, setendNodeMove] = useState(false)
   const [startNodeMove, setstartNodeMove] = useState(false)
+
   function handleMouseDown(node) {
     if (node.isEndNode) {
       setendNodeMove(true)
@@ -16,8 +17,6 @@ function Grid(props) {
     }
     if (node.isWall) {
       setWallSelected(true)
-    } else {
-      setWallSelected(false)
     }
 
     node.isWall = !node.isWall
@@ -38,6 +37,9 @@ function Grid(props) {
         endNode: { x: node.x, y: node.y }
       })
       setendNodeMove(false)
+    }
+    if(wallSelected){
+      setWallSelected(false)
     }
   }
   function handleMouseOver(node) {
@@ -90,6 +92,26 @@ function Grid(props) {
       }
       return
     }
+    if (wallSelected && mouseDown){
+      console.log(node.isWall)
+      if (!node.isWall) return;
+      props.setGrid({
+        ...props.grid,
+        nodes: props.grid.nodes.map((row, rowIndex) => {
+          return row.map((col, colIndex) => {
+
+            if (rowIndex === node.x && colIndex === node.y && !node.isStartNode && !node.isEndNode) {
+              return {
+                ...col,
+                isWall: false
+              }
+            }
+            return col
+          })
+        })
+      })
+      return
+    }
 
     if (!mouseDown) return;
     props.setGrid({
@@ -110,22 +132,24 @@ function Grid(props) {
 
   }
   function getClassName(node) {
+    // console.log("called")
     var classname = "w-[40px] h-[40px] outline outline-1 outline-slate-900 "
     if (node.isStartNode) {
-      classname += "bg-green-500 animate-wallAnimation"
+      classname += " bg-green-500 animate-wallAnimation"
     }
     if (node.isEndNode) {
-      classname += "bg-red-500 animate-wallAnimation"
+      classname += " bg-red-500 animate-wallAnimation"
     }
     if (node.isWall) {
-      classname += "bg-stone-500 animate-wallAnimation"
+      classname += " bg-stone-500 animate-wallAnimation"
     }
     if (node.isVisited) {
-      classname += "bg-blue-500 animate-wallAnimation"
+      classname += " bg-blue-500 animate-wallAnimation"
     }
     if (node.isPath) {
-      classname += "bg-cyan-400 animate-wallAnimation"
+      classname += " bg-cyan-400 animate-wallAnimation"
     }
+    
     return classname
   }
 

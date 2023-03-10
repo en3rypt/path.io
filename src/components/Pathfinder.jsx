@@ -87,7 +87,7 @@ function Pathfinder() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    
+    console.log(grid.rows*grid.cols)
 
     return (
         <div>

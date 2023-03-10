@@ -46,9 +46,6 @@ function Commands(props) {
         })
     }
 
-    function visualize() {
-        props.visualize();
-    }
     const generateGraphFromGridNodes = (gridNodes) => {
         const graph = new Graph();
         for (let i = 0; i < gridNodes.length; i++) {
@@ -140,9 +137,8 @@ function Commands(props) {
       }
 
     return (
-        <Draggable nodeRef={nodeRef}  cancel=".btn" >
-            <div ref={nodeRef} className='px-5 py-5 w-fit right-5 top-64 bg-slate-300 bg-opacity-90 absolute cursor-move  rounded-md'>
-                <div className="flex flex-col justify-center items-center">
+            <div ref={nodeRef} className='px-5 py-5 w-fit   rounded-md'>
+                <div className="flex  justify-center items-center">
                     <div className='my-3 flex justify-center items-center'>
                     <button onClick={visualize}  className="mx-2 px-4 py-2 text-xs md:text-base font-medium md:leading-6 text-white whitespace-no-wrap bg-green-600 border border-green-700 rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" data-rounded="rounded-md" data-primary="green-600" data-primary-reset="{}">
                             Visualize
@@ -209,7 +205,6 @@ function Commands(props) {
                         </div>
                 </div>
             </div>
-        </Draggable>
     )
 }
 
