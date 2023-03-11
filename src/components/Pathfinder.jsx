@@ -13,7 +13,7 @@ import Stats from './Stats'
 let rerenderCount = 0;
 
 function Pathfinder() {
-    console.log('rerender count: ', rerenderCount++)
+    // console.log('rerender count: ', rerenderCount++)
 
     //grid
     const [grid, setGrid] = useState({
@@ -65,12 +65,13 @@ function Pathfinder() {
             const width = window.innerWidth;
             const height = window.innerHeight;
             // const [row, col] = [5, 5];
-            const row = Math.max(Math.floor(height / 40) - 3, 3)
-            const col = Math.max(Math.floor(width / 40) - 2, 3)
+            const row = Math.max(Math.floor(height / 40) - 5, 3)
+            const col = Math.max(Math.floor(width / 40) - 1,3)
             const [startX, startY] = randomXY(row, col)
             const [endX, endY] = randomXY(row, col, startX, startY)
             const initialGrid = populateGrid(row, col, startX, startY, endX, endY)
             setGrid({
+                ...grid,
                 nodes: initialGrid,
                 startNode: { x: startX, y: startY },
                 endNode: { x: endX, y: endY },
@@ -89,7 +90,7 @@ function Pathfinder() {
     }, []);
 
 
-    console.log(grid.rows, grid.cols, grid.startNode, grid.endNode, grid.nodes.length, grid.nodes);
+    // console.log(grid.rows, grid.cols, grid.startNode, grid.endNode, grid.nodes.length, grid.nodes);
 
     return (
         <div>

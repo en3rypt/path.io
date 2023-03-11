@@ -17,9 +17,19 @@ function Grid(props) {
     }
     if (node.isWall) {
       setWallSelected(true)
+      props.setGrid({
+        ...props.grid,
+        wallNodes:props.grid.wallNodes-1,
+      })
+      node.isWall = false
+    }else{
+      props.setGrid({
+        ...props.grid,
+        wallNodes:props.grid.wallNodes+1
+      })
+      node.isWall = true
     }
-
-    node.isWall = !node.isWall
+    
     setMouseDown(true)
   }
   function handleMouseUp(node) {
@@ -53,7 +63,8 @@ function Grid(props) {
               if (rowIndex == node.x && colIndex == node.y) {
                 return {
                   ...col,
-                  isEndNode: true
+                  isEndNode: true,
+                  
                 }
               } else {
                 return {
@@ -93,10 +104,10 @@ function Grid(props) {
       return
     }
     if (wallSelected && mouseDown){
-      console.log(node.isWall)
       if (!node.isWall) return;
       props.setGrid({
         ...props.grid,
+        wallNodes:props.grid.wallNodes-1,
         nodes: props.grid.nodes.map((row, rowIndex) => {
           return row.map((col, colIndex) => {
 
@@ -116,13 +127,14 @@ function Grid(props) {
     if (!mouseDown) return;
     props.setGrid({
       ...props.grid,
+      wallNodes:props.grid.wallNodes+1,
       nodes: props.grid.nodes.map((row, rowIndex) => {
         return row.map((col, colIndex) => {
 
           if (rowIndex === node.x && colIndex === node.y && node.isWall === false && !node.isStartNode && !node.isEndNode) {
             return {
               ...col,
-              isWall: !col.isWall
+              isWall: !col.isWall,
             }
           }
           return col
@@ -133,7 +145,7 @@ function Grid(props) {
   }
   function getClassName(node) {
     // console.log("called")
-    var classname = "w-[40px] h-[40px] outline outline-1 outline-slate-900 "
+    var classname = `w-[${props.grid.nodeWidth}px] h-[${props.grid.nodeHeight}px] outline outline-1 outline-slate-900 `
     if (node.isStartNode) {
       classname += " bg-green-500 animate-wallAnimation"
     }
@@ -154,7 +166,7 @@ function Grid(props) {
   }
 
   return (
-    <div className='py-5'>
+    <div className='py-5 flex flex-col justify-center items-center'>
       {
         props.grid.nodes.map((row, rowIndex) => {
           return (

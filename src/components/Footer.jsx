@@ -6,7 +6,7 @@ function Footer() {
         <div className="px-4 pt-6">
             <div className="mb-6 flex justify-center">
             <a
-                href="#!"
+                href="https://github.com/en3rypt/path.io/"
                 type="button"
                 className="m-1 h-9 w-9 rounded-full border-2 border-white uppercase leading-normal text-white transition duration-150 ease-in-out hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0"
                 data-te-ripple-init
@@ -24,10 +24,13 @@ function Footer() {
         </div>
 
         <div className="pb-4 text-center">
-            © 2023 Copyright:
-            <a className="text-whitehite" href="https://tailwind-elements.com/">
-                Tailwind Elements
-            </a >
+            &lt;/&gt; with ❤️ by &#160;
+            <a className="text-whitehite underline" href="https://github.com/jassuwu/">
+                 jassuwu
+            </a >  && &#160;
+            <a className="text-whitehite underline" href="https://github.com/en3rypt">
+                 en3rypt
+            </a > 
         </div>
     </div>
   )

@@ -15,6 +15,7 @@ const algorithms = [
 function Commands(props) {
     const nodeRef = useRef(null);
     const [selected, setSelected] = useState(algorithms[0])
+    const [isVisualize, setIsVisualize] = useState(false)
     function clearWalls() {
         props.setGrid({
             ...props.grid,
@@ -29,13 +30,13 @@ function Commands(props) {
         })
     }
     function clearGrid() {
+        setIsVisualize(false)
         props.setGrid({
             ...props.grid,
             nodes: props.grid.nodes.map((row, rowIndex) => {
                 return row.map((col, colIndex) => {
                     return {
                         ...col,
-                        isWall: false,
                         isVisited: false,
                         isPath: false,
                         distance: Infinity,
@@ -66,6 +67,7 @@ function Commands(props) {
     }
 
     function visualize() {
+        setIsVisualize(true)
         let stepWiseVisited = [];
         let visited = [];
         let stepWisePath = [];
@@ -103,10 +105,13 @@ function Commands(props) {
             // const stepWisePath = UCS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).stepWisePath;
         }
         stepWiseVisited.forEach(visitedStep => {
+            
             const newGrid = props.grid.nodes.map((row, i) => {
+                props.setGrid({...props.grid,visitedNodes:props.grid.visitedNodes+1})
+                // console.log(props.grid.visitedNodes)
                 setTimeout(() =>
-                    props.setGrid({ ...props.grid, nodes: newGrid })
-                    , 1);
+                props.setGrid({ ...props.grid, nodes: newGrid})
+                , 1);
                 return row.map((node, j) => {
                     const nodeKey = `${node.x}-${node.y}`;
                     const isVisited = visitedStep.includes(nodeKey);
@@ -115,7 +120,7 @@ function Commands(props) {
             });
         });
 
-        stepWisePath.forEach(pathStep => {
+        stepWisePath && stepWisePath.forEach(pathStep => {
             const newGrid = props.grid.nodes.map((row, i) => {
                 return row.map((node, j) => {
                     const nodeKey = `${node.x}-${node.y}`;
@@ -137,10 +142,10 @@ function Commands(props) {
     }
 
     return (
-        <div ref={nodeRef} className='px-5 py-5 w-fit   rounded-md'>
-            <div className="flex  justify-center items-center">
+        <div ref={nodeRef} className='px-5 py-5 w-full'>
+            <div className="flex flex-col sm:flex-row  justify-center items-center">
                 <div className='my-3 flex justify-center items-center'>
-                    <button onClick={visualize} className="mx-2 px-4 py-2 text-xs md:text-base font-medium md:leading-6 text-white whitespace-no-wrap bg-green-600 border border-green-700 rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" data-rounded="rounded-md" data-primary="green-600" data-primary-reset="{}">
+                    <button disabled={isVisualize} onClick={visualize} className={` mx-2 px-4 py-2 text-xs md:text-base font-medium md:leading-6 text-white whitespace-no-wrap ${isVisualize?'opacity-50 bg-slate-600 border border-slate-700 rounded-md shadow-sm  focus:outline-none focus:ring-2 focus:ring-offset-2 ':'bg-green-600 border border-green-700 rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500'}`} data-rounded="rounded-md" data-primary="green-600" data-primary-reset="{}">
                         Visualize
                     </button>
                     <button onClick={clearGrid} className="mx-2 px-4 py-2 text-xs md:text-base font-medium md:leading-6 text-white whitespace-no-wrap bg-red-600 border border-red-700 rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" data-rounded="rounded-md" data-primary="red-600" data-primary-reset="{}">
@@ -151,7 +156,7 @@ function Commands(props) {
                     </button>
 
                 </div>
-                <div className=" w-30 sm:w-80 ">
+                <div className=" w-30 sm:w-80 mx-3">
                     <Listbox value={selected} onChange={setSelected}>
                         <div className="relative mt-1">
                             <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
