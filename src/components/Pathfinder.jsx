@@ -28,6 +28,7 @@ function Pathfinder() {
         visitedNodes: 0,
         exploredNodes: 0,
     })
+    
 
     function randomXY(row, col, x1 = -1, y1 = -1) {
         const x = Math.floor(Math.random() * row)
