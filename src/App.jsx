@@ -7,16 +7,16 @@ import Footer from "./components/Footer"
 function App() {
   return (
     <div className="">
-      <Navbar />
-      
+      {/* <Navbar /> */}
+
       {/* <Commands /> */}
       {/* <DropDown /> */}
       <div className="flex flex-col items-center">
         <Pathfinder />
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
-  ) 
+  )
 }
 
 export default App

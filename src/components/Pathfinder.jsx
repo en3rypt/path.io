@@ -28,7 +28,7 @@ function Pathfinder() {
         visitedNodes: 0,
         exploredNodes: 0,
     })
-    
+
 
     function randomXY(row, col, x1 = -1, y1 = -1) {
         const x = Math.floor(Math.random() * row)
@@ -67,7 +67,7 @@ function Pathfinder() {
             const height = window.innerHeight;
             // const [row, col] = [5, 5];
             const row = Math.max(Math.floor(height / 40) - 5, 3)
-            const col = Math.max(Math.floor(width / 40) - 1,3)
+            const col = Math.max(Math.floor(width / 40) - 1, 3)
             const [startX, startY] = randomXY(row, col)
             const [endX, endY] = randomXY(row, col, startX, startY)
             const initialGrid = populateGrid(row, col, startX, startY, endX, endY)
@@ -94,8 +94,8 @@ function Pathfinder() {
     // console.log(grid.rows, grid.cols, grid.startNode, grid.endNode, grid.nodes.length, grid.nodes);
 
     return (
-        <div>
-            <Stats grid={grid} />
+        <div className='p-8'>
+            {/* <Stats grid={grid} /> */}
             <Commands
                 grid={grid}
                 setGrid={setGrid}
