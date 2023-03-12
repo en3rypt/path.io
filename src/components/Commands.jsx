@@ -2,7 +2,7 @@ import React, { useRef, useState, Fragment } from 'react'
 import Draggable from 'react-draggable';
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
-import { Graph, BFS, DFS, DLS, IDDFS, BDS, GBFS } from '../lib';
+import { Graph, BFS, DFS, DLS, IDDFS, BDS, GBFS, ASTAR } from '../lib';
 
 const algorithms = [
     { name: 'Breadth First Search' },
@@ -110,8 +110,11 @@ function Commands(props) {
         } else if (selected.name === 'A* Search') {
             // ASTAR
             stepWiseVisited = ASTAR(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).stepWiseVisited;
+            console.log(stepWiseVisited)
             visited = ASTAR(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).visited;
+            console.log(visited)
             stepWisePath = ASTAR(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).stepWisePath;
+            console.log(stepWisePath)
         }
         stepWiseVisited.forEach(visitedStep => {
 
