@@ -2,7 +2,7 @@ import React, { useRef, useState, Fragment } from 'react'
 import Draggable from 'react-draggable';
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
-import { Graph, BFS, DFS, DLS, IDDFS, BDS, ASTAR } from '../lib';
+import { Graph, BFS, DFS, DLS, IDDFS, BDS, GBFS } from '../lib';
 
 const algorithms = [
     { name: 'Breadth First Search' },
@@ -10,6 +10,7 @@ const algorithms = [
     { name: 'Depth Limited Search' },
     { name: 'Iterative deepening depth-first search' },
     { name: 'Bi-Directional Search' },
+    { name: 'Greedy Best First Search' },
     { name: 'A* Search' },
 ]
 
@@ -101,6 +102,11 @@ function Commands(props) {
             stepWiseVisited = BDS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).stepWiseVisited;
             visited = BDS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).visited;
             stepWisePath = BDS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).stepWisePath;
+        } else if (selected.name === 'Greedy Best First Search') {
+            // GBFS
+            stepWiseVisited = GBFS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).stepWiseVisited;
+            visited = GBFS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).visited;
+            stepWisePath = GBFS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).stepWisePath;
         } else if (selected.name === 'A* Search') {
             // ASTAR
             stepWiseVisited = ASTAR(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).stepWiseVisited;

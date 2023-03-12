@@ -18,7 +18,7 @@ const toStepWisePath = (pathTaken) => {
     return stepWisePath;
 }
 
-const ASTAR = (graphNodes, start, end) => {
+const GBFS = (graphNodes, start, end) => {
     const startString = `${start.x}-${start.y}`;
     const endString = `${end.x}-${end.y}`;
 
@@ -74,4 +74,4 @@ const ASTAR = (graphNodes, start, end) => {
     return { pathExists: false, addedToQueueBy, visited, stepWiseVisited };
 }
 
-export default ASTAR;
+export default GBFS;
