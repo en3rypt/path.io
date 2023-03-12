@@ -4,5 +4,6 @@ import DFS from "./DFS";
 import DLS from "./DLS";
 import IDDFS from "./IDDFS";
 import BDS from "./BDS";
+import ASTAR from "./ASTAR";
 
-export { Graph, BFS, DFS, DLS, IDDFS, BDS };
+export { Graph, BFS, DFS, DLS, IDDFS, BDS, ASTAR };
