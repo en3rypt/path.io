@@ -155,7 +155,7 @@ function Commands(props) {
     }
 
     return (
-        <div ref={nodeRef} className='min-[480px]:px-5  w-full'>
+        <div ref={nodeRef} className='min-[480px]:px-5  w-full mt-10'>
             <div className="flex flex-col md:flex-row  justify-between items-center">
                 <div className='flex max-[480px]:flex-col justify-between items-center gap-4'>
                     <div>
@@ -187,7 +187,7 @@ function Commands(props) {
                     </div>
 
                 </div>
-                <div className='flex justify-center items-center'>
+                <div className='flex flex-col sm:flex-row justify-center items-center z-50'>
                     <div className="mb-3 md:mb-0 w-30 lg:w-80 mx-3">
                         <Listbox value={selected} onChange={setSelected}>
                             <div className="relative">
@@ -206,7 +206,7 @@ function Commands(props) {
                                     leaveFrom="opacity-100"
                                     leaveTo="opacity-0"
                                 >
-                                    <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                                    <Listbox.Options className="z-50 absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                                         {algorithms.map((algorithm, algorithmIdx) => (
                                             <Listbox.Option
                                                 key={algorithmIdx}
@@ -238,17 +238,18 @@ function Commands(props) {
                             </div>
                         </Listbox>
                     </div>
-                    <button disabled={isVisualize} onClick={visualize} className={`relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group border-[0px] ${isVisualize ? 'rounded-md shadow-sm  focus:outline-none focus:ring-2 focus:ring-offset-2 ' : ' bg-slate-600 border border-slate-700 bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300  focus:ring-4 focus:outline-none focus:ring-lime-200'} `}>
-                        <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white  rounded-md group-hover:bg-opacity-0">
-                            Visualize
-                        </span>
-                    </button>
                     {selected.name == "Depth Limited Search" ?
-                        <div className="flex flex-col justify-center items-center">
+                        <div className="mb-3 flex flex-col justify-center items-center">
                             <label htmlFor="depthLimit"> Depth limit</label>
                             <input className="w-16 lg:w-28 mx-3 rounded-lg bg-white py-2 pl-3 pr-3 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-400 sm:text-sm" type="number" name="depth" value={limit} id="depthLimit" onChange={(e) => { setLimit(e.target.value) }} />
                         </div>
                         : null}
+                    <button disabled={isVisualize} onClick={visualize} className={`z-40 relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group border-[0px] ${isVisualize ? 'rounded-md shadow-sm  focus:outline-none focus:ring-2 focus:ring-offset-2 ' : ' bg-slate-600 border border-slate-700 bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300  focus:ring-4 focus:outline-none focus:ring-lime-200'} `}>
+                        <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white  rounded-md group-hover:bg-opacity-0">
+                            Visualize
+                        </span>
+                    </button>
+                    
                 </div>
                 <div className='flex max-[480px]:flex-col justify-center items-center'>
                     <div>

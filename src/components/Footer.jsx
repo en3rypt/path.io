@@ -4,7 +4,7 @@ function Footer() {
   return (
     <div className="bg-neutral-900 text-center text-white">
         <div className="px-4 pt-6">
-            <div className="mb-6 flex justify-center">
+            <div className="h-fit pb-6 flex justify-center">
             <a
                 href="https://github.com/en3rypt/path.io/"
                 type="button"
@@ -21,16 +21,6 @@ function Footer() {
                 </svg>
             </a>
             </div>
-        </div>
-
-        <div className="pb-4 text-center">
-            &lt;/&gt; with ❤️ by &#160;
-            <a className="text-whitehite underline" href="https://github.com/jassuwu/">
-                 jassuwu
-            </a >  && &#160;
-            <a className="text-whitehite underline" href="https://github.com/en3rypt">
-                 en3rypt
-            </a > 
         </div>
     </div>
   )
