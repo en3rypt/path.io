@@ -5,7 +5,6 @@ import Grid from './Grid'
 
 
 // graph
-import { Graph, BFS, DFS, DLS, IDDFS, BDS } from '../lib';
 
 import Commands from './Commands'
 
@@ -31,8 +30,7 @@ function Pathfinder() {
         return (x == x1 || y == y1) ? randomXY(row, col, x1, y1) : [x, y]
     }
     function populateGrid(row, col, startX, startY, endX, endY) {
-
-        var count = 0
+        let count = 0
         const nodes = []
         for (let i = 0; i < row; i++) {
             const currentRow = []
@@ -60,7 +58,6 @@ function Pathfinder() {
         function handleResize() {
             const width = window.innerWidth;
             const height = window.innerHeight;
-            // const [row, col] = [5, 5];
             const row = Math.max(Math.floor(height / 40) - 5, 3)
             const col = Math.max(Math.floor(width / 40) - 1, 3)
             const [startX, startY] = randomXY(row, col)

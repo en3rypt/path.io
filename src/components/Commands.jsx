@@ -73,8 +73,6 @@ function Commands(props) {
     function visualize() {
         setIsVisualize(true)
         let answer = [];
-        let visited = [];
-        let stepWisePath = [];
         if (selected.name === 'Breadth First Search') {
             // BFS
             answer = BFS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode);
@@ -191,7 +189,7 @@ function Commands(props) {
                                     <Listbox.Options className="z-50 absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                                         {algorithms.map((algorithm, algorithmIdx) => (
                                             <Listbox.Option
-                                                key={`${algorithmIdx}-idx`}
+                                                key={algorithm.id}
                                                 className={({ active }) =>
                                                     `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-amber-100 text-amber-900' : 'text-gray-900'
                                                     }`

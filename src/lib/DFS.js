@@ -3,7 +3,6 @@ const pathNodes = (atqb, endNode) => {
     const endNodeString = `${endNode.x}-${endNode.y}`;
     let currentNode = endNodeString;
     while (currentNode) {
-        // nodesToColor.unshift(currentNode);
         nodesToColor.push(currentNode);
         currentNode = atqb[currentNode];
     }

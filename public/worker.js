@@ -1,5 +1,4 @@
-var CACHE_NAME = 'pwa-path-io';
-var urlsToCache = [
+const CACHE_NAME = 'pwa-path-io'; const urlsToCache = [
     '/',
 ];
 
@@ -32,7 +31,7 @@ self.addEventListener('fetch', event => {
 
 // Update a service worker
 self.addEventListener('activate', event => {
-    var cacheWhitelist = ['pwa-oath-ioSS'];
+    const cacheWhitelist = ['pwa-oath-ioSS'];
     event.waitUntil(
         caches.keys().then(cacheNames => {
             return Promise.all(

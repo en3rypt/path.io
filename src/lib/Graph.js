@@ -31,19 +31,3 @@ class Graph {
 }
 
 export default Graph;
-
-
-// const graph = new Graph();
-
-// graph.addVertex("Tokyo");
-// graph.addVertex("Dallas");
-// graph.addVertex("Aspen");
-// graph.addVertex("Los Angeles");
-
-// graph.addEdge("Tokyo", "Dallas");
-// graph.addEdge("Tokyo", "Aspen");
-// graph.addEdge("Dallas", "Aspen");
-// graph.addEdge("Dallas", "Los Angeles");
-// graph.addEdge("Aspen", "Los Angeles");
-
-// console.log(graph);
