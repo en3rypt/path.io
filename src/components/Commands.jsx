@@ -1,17 +1,16 @@
 import React, { useRef, useState, Fragment } from 'react'
-import Draggable from 'react-draggable';
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
-import { Graph, BFS, DFS, DLS, IDDFS, BDS, GBFS, ASTAR } from '../lib';
+import { Graph, BFS, DFS, DLS, IDDFS, GBFS, ASTAR } from '../lib';
 
 const algorithms = [
-    { name: 'Breadth First Search' },
-    { name: 'Depth First Search' },
-    { name: 'Depth Limited Search' },
-    { name: 'Iterative deepening depth-first search' },
-    // { name: 'Bi-Directional Search' },
-    { name: 'Greedy Best First Search' },
-    { name: 'A* Search' },
+    { name: 'Breadth First Search',id:1 },
+    { name: 'Depth First Search',id:2 },
+    { name: 'Depth Limited Search',id:3 },
+    { name: 'Iterative deepening depth-first search',id:4 },
+    // { name: 'Bi-Directional Search',id:5 },
+    { name: 'Greedy Best First Search',id:6 },
+    { name: 'A* Search',id:7 },
 ]
 
 function Commands(props) {
@@ -73,52 +72,35 @@ function Commands(props) {
 
     function visualize() {
         setIsVisualize(true)
-        let stepWiseVisited = [];
+        let answer = [];
         let visited = [];
         let stepWisePath = [];
         if (selected.name === 'Breadth First Search') {
-
             // BFS
-            stepWiseVisited = BFS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).stepWiseVisited;
-            visited = BFS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).visited;
-            stepWisePath = BFS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).stepWisePath;
+            answer = BFS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode);
         } else if (selected.name === 'Depth First Search') {
             // DFS
-            stepWiseVisited = DFS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).stepWiseVisited;
-            visited = DFS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).visited;
-            stepWisePath = DFS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).stepWisePath;
+            answer = DFS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode);
         } else if (selected.name === 'Depth Limited Search') {
             // DLS
-            stepWiseVisited = DLS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode, limit).stepWiseVisited;
-            visited = DLS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode, limit).visited;
-            stepWisePath = DLS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode, limit).stepWisePath;
+            answer = DLS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode, limit);
         } else if (selected.name === 'Iterative deepening depth-first search') {
             // IDDFS
-            stepWiseVisited = IDDFS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode, limit).stepWiseVisited;
-            visited = IDDFS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode, limit).visited;
-            stepWisePath = IDDFS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode, limit).stepWisePath;
+            answer = IDDFS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode, limit);
             // } else if (selected.name === 'Bi-Directional Search') {
             //     // BDS (Requires special implementation - so better to remove)
-            //     stepWiseVisited = BDS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).stepWiseVisited;
+            //     answer = BDS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode);
             //     visited = BDS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).visited;
             //     stepWisePath = BDS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).stepWisePath;
             //     console.log(stepWisePath, 'BDS')
         } else if (selected.name === 'Greedy Best First Search') {
             // GBFS
-            stepWiseVisited = GBFS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).stepWiseVisited;
-            visited = GBFS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).visited;
-            stepWisePath = GBFS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).stepWisePath;
-            console.log(stepWisePath, 'GBFS')
-        } else if (selected.name === 'A* Search') {
+            answer = GBFS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode);
+            } else if (selected.name === 'A* Search') {
             // ASTAR
-            stepWiseVisited = ASTAR(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).stepWiseVisited;
-            console.log(stepWiseVisited)
-            visited = ASTAR(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).visited;
-            console.log(visited)
-            stepWisePath = ASTAR(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).stepWisePath;
-            console.log(stepWisePath)
-        }
-        stepWiseVisited.forEach(visitedStep => {
+            answer = ASTAR(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode);
+            }
+        answer.stepWiseVisited.forEach(visitedStep => {
 
             const newGrid = props.grid.nodes.map((row, i) => {
                 props.setGrid({ ...props.grid, visitedNodes: props.grid.visitedNodes + 1 })
@@ -134,11 +116,11 @@ function Commands(props) {
             });
         });
 
-        stepWisePath && stepWisePath.forEach(pathStep => {
+        answer.stepWisePath && answer.stepWisePath.forEach(pathStep => {
             const newGrid = props.grid.nodes.map((row, i) => {
                 return row.map((node, j) => {
                     const nodeKey = `${node.x}-${node.y}`;
-                    const isVisited = visited.has(nodeKey);
+                    const isVisited = answer.visited.has(nodeKey);
                     const isPath = pathStep.includes(nodeKey);
                     if (isPath) {
                         return { ...node, isPath, isVisited: false };
@@ -209,7 +191,7 @@ function Commands(props) {
                                     <Listbox.Options className="z-50 absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                                         {algorithms.map((algorithm, algorithmIdx) => (
                                             <Listbox.Option
-                                                key={algorithmIdx}
+                                                key={`${algorithmIdx}-idx`}
                                                 className={({ active }) =>
                                                     `relative cursor-default select-none py-2 pl-10 pr-4 ${active ? 'bg-amber-100 text-amber-900' : 'text-gray-900'
                                                     }`

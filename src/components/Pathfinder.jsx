@@ -8,13 +8,8 @@ import Grid from './Grid'
 import { Graph, BFS, DFS, DLS, IDDFS, BDS } from '../lib';
 
 import Commands from './Commands'
-import Stats from './Stats'
-
-let rerenderCount = 0;
 
 function Pathfinder() {
-    // console.log('rerender count: ', rerenderCount++)
-
     //grid
     const [grid, setGrid] = useState({
         nodes: [],
@@ -90,8 +85,6 @@ function Pathfinder() {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-
-    // console.log(grid.rows, grid.cols, grid.startNode, grid.endNode, grid.nodes.length, grid.nodes);
 
     return (
         <div className=''>
