@@ -1,7 +1,6 @@
 var CACHE_NAME = 'pwa-path-io';
 var urlsToCache = [
     '/',
-    '/completed'
 ];
 
 // Install a service worker

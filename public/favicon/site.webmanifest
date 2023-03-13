@@ -1,7 +1,6 @@
 {
   "name": "Path.io",
   "short_name": "Path.io",
-  "scope": "/",
   "start_url": "/",
   "description": "Interactive Way to learn Algorithms",
   "icons": [
