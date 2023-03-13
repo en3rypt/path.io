@@ -1,0 +1,22 @@
+{
+  "name": "Path.io",
+  "short_name": "Path.io",
+  "scope": "/",
+  "start_url": "/",
+  "description": "Interactive Way to learn Algorithms",
+  "icons": [
+    {
+      "src": "android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#f7f7f7",
+  "background_color": "#f7f7f7",
+  "display": "standalone"
+}

@@ -57,8 +57,7 @@ const ASTAR = (graphNodes, start, end) => {
     while (priorityQueue.length > 0) {
         priorityQueue.sort((a, b) => (a.costSoFar + a.heuristicValue) - (b.costSoFar + b.heuristicValue));
         console.log(priorityQueue)
-        const { node, costSoFar, heuristicValue } = priorityQueue.shift();
-        // console.log(node, costSoFar, heuristicValue);
+        const { node, costSoFar } = priorityQueue.shift();
 
         if (node === endString) {
             const pathTaken = pathNodes(addedToQueueBy, end);

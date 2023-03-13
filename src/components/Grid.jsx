@@ -144,8 +144,7 @@ function Grid(props) {
 
   }
   function getClassName(node) {
-    // console.log("called")
-    var classname = `w-[${props.grid.nodeWidth}px] h-[${props.grid.nodeHeight}px] outline outline-1 outline-slate-900 `
+    let classname = `w-[${props.grid.nodeWidth}px] h-[${props.grid.nodeHeight}px] outline outline-1 outline-slate-900 `
     if (node.isStartNode) {
       classname += " bg-green-500 animate-wallAnimation"
     }
@@ -175,7 +174,7 @@ function Grid(props) {
                 row.map((node, colIndex) => {
                   return (
                     <div
-                      key={`node-${rowIndex}-${colIndex}`}
+                      key={`node-${node.x}-${node.y}`}
                       className={getClassName(node)}
                       onMouseDown={() => { handleMouseDown(node) }}
                       onMouseUp={() => { handleMouseUp(node) }}
