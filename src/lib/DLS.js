@@ -20,36 +20,40 @@ const toStepWisePath = (pathTaken) => {
 }
 
 const DLS = (graphNodes, start, end, limit) => {
-    const startString = `${start.x}-${start.y}`;
-    const endString = `${end.x}-${end.y}`;
-    const stepWiseVisited = [];
-    const stack = [{ node: startString, path: [startString] }];
-    const addedToStackBy = {};
-    const visited = new Set();
+    return new Promise((resolve, reject) => {
+        const startString = `${start.x}-${start.y}`;
+        const endString = `${end.x}-${end.y}`;
+        const stepWiseVisited = [];
+        const stack = [{ node: startString, path: [startString] }];
+        const addedToStackBy = {};
+        const visited = new Set();
 
-    stepWiseVisited.push([...visited]);
-
-    while (stack.length > 0) {
-        const { node, path } = stack.pop();
-        if (visited.has(node)) continue;
-        visited.add(node);
         stepWiseVisited.push([...visited]);
 
-        if (node === endString) {
-            const pathTaken = pathNodes(addedToStackBy, end);
-            return { pathExists: true, pathTaken, visited, stepWiseVisited, stepWisePath: toStepWisePath(pathTaken) };
-        }
+        while (stack.length > 0) {
+            const { node, path } = stack.pop();
+            if (visited.has(node)) continue;
+            visited.add(node);
+            stepWiseVisited.push([...visited]);
 
-        const neighbors = graphNodes[node];
-        for (let neighbor of neighbors) {
+            if (node === endString) {
+                const pathTaken = pathNodes(addedToStackBy, end);
+                resolve({ pathExists: true, pathTaken, visited, stepWiseVisited, stepWisePath: toStepWisePath(pathTaken) });
+                return;
+            }
 
-            if (!visited.has(neighbor) && path.length < limit) {
-                addedToStackBy[neighbor] = node;
-                stack.push({ node: neighbor, path: [...path, neighbor] });
+            const neighbors = graphNodes[node];
+            for (let neighbor of neighbors) {
+
+                if (!visited.has(neighbor) && path.length < limit) {
+                    addedToStackBy[neighbor] = node;
+                    stack.push({ node: neighbor, path: [...path, neighbor] });
+                }
             }
         }
-    }
-    return { pathExists: false, pathTaken: [], visited, stepWiseVisited, stepWisePath: [] };
+        resolve({ pathExists: false, pathTaken: [], visited, stepWiseVisited, stepWisePath: [] });
+        return;
+    });
 };
 
 

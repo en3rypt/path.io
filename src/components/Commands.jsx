@@ -1,9 +1,11 @@
 import React, { useRef, useState, Fragment, useEffect } from 'react'
+import {Link,useNavigate} from 'react-router-dom'
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
-import { Graph, BFS, DFS, DLS, IDDFS, GBFS, ASTAR } from '../lib';
+import { Graph, BFS, DFS,BDS, DLS, IDDFS, GBFS, ASTAR } from '../lib';
 import executionTime from '../lib/Timer';
 import Instructions from './Instructions';
+import Graphs from './Graphs';
 const algorithms = [
     { name: 'Breadth First Search',id:1 },
     { name: 'Depth First Search',id:2 },
@@ -24,15 +26,16 @@ function Commands(props) {
     const [answer, setAnswer] = useState(null)
     const [showTime, setshowTime] = useState(false)
     const [pause, setPause] = useState(false)
+    const [showGraphs, setShowGraphs] = useState(false)
+    const [graphResult, setGraphResult] = useState(null)
     useEffect(()=>{
-        console.log(pause)
+        console.log('rendered')
         if(answer ){
             let index = 0;
             const interval = setInterval(() => {
-           
-                    console.log(pause)
                     if(index >= answer.stepWiseVisited.length){
                         clearInterval(interval)
+                        if(!answer.pathExists) return
                         let index1 = 0;
                         const interval1 = setInterval(() => {
                             if(index1 >= answer.stepWisePath.length ){
@@ -135,7 +138,7 @@ function Commands(props) {
         return graph;
     }
 
-    function visualize() {
+    async function visualize() {
         setIsVisualize(true)
         let response;
         let answer = [];
@@ -144,45 +147,50 @@ function Commands(props) {
         if (selected.name === 'Breadth First Search') {
             // BFS
             decorator = executionTime(BFS)
-            response = decorator(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode);
+            response = await decorator(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode);
+            console.log(response.result)
             answer = response.result;
             time = response.time;
             
         } else if (selected.name === 'Depth First Search') {
             // DFS
             decorator = executionTime(DFS)
-            response = decorator(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode);
+            response = await decorator(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode);
             answer = response.result;
             time = response.time;
         } else if (selected.name === 'Depth Limited Search') {
             // DLS
             decorator = executionTime(DLS)
-            response = decorator(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode, limit);
+            response = await decorator(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode, limit);
             answer = response.result;
             time = response.time;
         } else if (selected.name === 'Iterative deepening depth-first search') {
             // IDDFS
             decorator = executionTime(IDDFS)
-            response = decorator(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode, limit);
+            response = await decorator(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode,1000000000);
             answer = response.result;
             time = response.time;
         } else if (selected.name === 'Bi-Directional Search') {
             // BDS (Requires special implementation - so better to remove)
-            answer = BDS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode);
-            visited = BDS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).visited;
-            stepWisePath = BDS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).stepWisePath;
-            console.log(stepWisePath, 'BDS')
-            
+            // answer = BDS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode);
+            // visited = BDS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).visited;
+            // stepWisePath = BDS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).stepWisePath;
+            // console.log(stepWisePath, 'BDS')
+            decorator = executionTime(BDS)
+            response = await decorator(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode);
+            answer = response.result;
+            time = response.time;
+            console.log(answer, 'BDS')
         } else if (selected.name === 'Greedy Best First Search') {
             // GBFS
             decorator = executionTime(GBFS)
-            response = decorator(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode);
+            response = await decorator(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode);
             answer = response.result;
             time = response.time;
         } else if (selected.name === 'A* Search') {
             // ASTAR
             decorator = executionTime(ASTAR)
-            response = decorator(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode);
+            response = await decorator(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode);
             answer = response.result;
             time = response.time;
         }
@@ -192,6 +200,48 @@ function Commands(props) {
     function handlePause() {
         setPause(!pause)
         console.log(pause)
+    }
+
+    // nvigation
+    const navigate = useNavigate();
+    function compareAlgo(){
+        navigate("/compare",{
+            state:{
+                grid:props.grid
+            }
+        })
+    }
+    async function handleCompare(){
+        let result = [];
+        let decorator;
+        let response;
+        decorator = executionTime(BFS)
+        response = await decorator(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode);
+        result.push(response)
+
+        decorator = executionTime(DFS)
+        response = await decorator(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode);
+        result.push(response)
+
+        decorator = executionTime(DLS)
+        response = await decorator(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode, limit);
+        result.push(response)
+
+        decorator = executionTime(IDDFS)
+        response = await decorator(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode,1000000000);
+        result.push(response)
+
+        decorator = executionTime(GBFS)
+        response = await decorator(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode);
+        result.push(response)
+
+        decorator = executionTime(ASTAR)
+        response = await decorator(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode);
+        result.push(response)
+
+        console.log(result)
+        setShowGraphs(true)
+        setGraphResult(result)
     }
 
     return (
@@ -270,9 +320,9 @@ function Commands(props) {
                                 Visualize
                             </span>
                         </button>
-                        <button disabled={!isVisualize} onClick={handlePause} className={`z-40 relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group border-[0px] ${!isVisualize ? 'rounded-md shadow-sm  focus:outline-none focus:ring-2 focus:ring-offset-2 ' : ' bg-slate-600 border border-slate-700 bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300  focus:ring-4 focus:outline-none focus:ring-lime-200'} `}>
+                        <button disabled={isVisualize} onClick={handleCompare} className={`z-40 relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group border-[0px] ${isVisualize ? 'rounded-md shadow-sm  focus:outline-none focus:ring-2 focus:ring-offset-2 ' : ' bg-slate-600 border border-slate-700 bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300  focus:ring-4 focus:outline-none focus:ring-lime-200'} `}>
                             <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white  rounded-md group-hover:bg-opacity-0">
-                                Pause
+                                Compare
                             </span>
                         </button>
                         
@@ -314,9 +364,10 @@ function Commands(props) {
                 {showInstructions ? (
                     <Instructions setShowInstructions={setShowInstructions}/>
                 ) : null}
+                {showGraphs?(<Graphs setShowGraphs={setShowGraphs} result={graphResult}/>):null}
             </div>
             {showTime?<div className="text-center">
-                <p>{`Total Execution time: ${timeTaken}`}</p>
+                <p>{`Total Execution time: ${timeTaken} ms`}</p>
             </div>:null}
         </>
 

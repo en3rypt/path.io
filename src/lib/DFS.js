@@ -21,36 +21,41 @@ const toStepWisePath = (pathTaken) => {
 
 
 const DFS = (graphNodes, start, end) => {
-    const startString = `${start.x}-${start.y}`;
-    const endString = `${end.x}-${end.y}`;
-    const stepWiseVisited = [];
-    const stack = [startString];
-    const addedToStackBy = {};
-    const visited = new Set();
+    return new Promise((resolve, reject) => {
+        const startString = `${start.x}-${start.y}`;
+        const endString = `${end.x}-${end.y}`;
+        const stepWiseVisited = [];
+        const stack = [startString];
+        const addedToStackBy = {};
+        const visited = new Set();
 
-    stepWiseVisited.push([...visited]);
-
-    while (stack.length > 0) {
-        const node = stack.pop();
-        if (visited.has(node)) continue;
-        visited.add(node);
         stepWiseVisited.push([...visited]);
 
-        if (node === endString) {
-            const pathTaken = pathNodes(addedToStackBy, end);
-            return { pathExists: true, pathTaken, visited, stepWiseVisited, stepWisePath: toStepWisePath(pathTaken) };
-        }
+        while (stack.length > 0) {
+            const node = stack.pop();
+            if (visited.has(node)) continue;
+            visited.add(node);
+            stepWiseVisited.push([...visited]);
 
-        const neighbors = graphNodes[node];
-        for (let neighbor of neighbors) {
+            if (node === endString) {
+                const pathTaken = pathNodes(addedToStackBy, end);
+                resolve({ pathExists: true, pathTaken, visited, stepWiseVisited, stepWisePath: toStepWisePath(pathTaken) });
+                console.log("pathTaken", pathTaken);
+                return;
+            }
 
-            if (!visited.has(neighbor)) {
-                addedToStackBy[neighbor] = node;
-                stack.push(neighbor);
+            const neighbors = graphNodes[node];
+            for (let neighbor of neighbors) {
+
+                if (!visited.has(neighbor)) {
+                    addedToStackBy[neighbor] = node;
+                    stack.push(neighbor);
+                }
             }
         }
-    }
-    return { pathExists: false, pathTaken: [], visited, stepWiseVisited, stepWisePath: [] };
+        resolve({ pathExists: false, pathTaken: [], visited, stepWiseVisited, stepWisePath: [] });
+        return;
+    });
 };
 
 

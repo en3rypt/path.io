@@ -20,39 +20,43 @@ const toStepWisePath = (pathTaken) => {
 }
 
 const BFS = (graphNodes, start, end) => {
-    const startString = `${start.x}-${start.y}`;
-    const endString = `${end.x}-${end.y}`;
-    const stepWiseVisited = [];
-    const queue = [startString];
-    const addedToQueueBy = {};
-    const visited = new Set();
-    visited.add(startString);
+    return new Promise((resolve, reject) => {
+        const startString = `${start.x}-${start.y}`;
+        const endString = `${end.x}-${end.y}`;
+        const stepWiseVisited = [];
+        const queue = [startString];
+        const addedToQueueBy = {};
+        const visited = new Set();
+        visited.add(startString);
 
-    while (queue.length > 0) {
-        const node = queue.shift();
-        const neighbors = graphNodes[node];
+        while (queue.length > 0) {
+            const node = queue.shift();
+            const neighbors = graphNodes[node];
 
-        for (let neighbor of neighbors) {
+            for (let neighbor of neighbors) {
 
-            if (neighbor === endString) {
-                addedToQueueBy[neighbor] = node;
-                visited.add(neighbor);
-                stepWiseVisited.push([...visited]);
-                const pathTaken = pathNodes(addedToQueueBy, end);
+                if (neighbor === endString) {
+                    addedToQueueBy[neighbor] = node;
+                    visited.add(neighbor);
+                    stepWiseVisited.push([...visited]);
+                    const pathTaken = pathNodes(addedToQueueBy, end);
 
-                return { pathExists: true, pathTaken, visited, stepWiseVisited, stepWisePath: toStepWisePath(pathTaken) };
+                    resolve({ pathExists: true, pathTaken, visited, stepWiseVisited, stepWisePath: toStepWisePath(pathTaken) });
+                    return
+                }
+
+                if (!visited.has(neighbor)) {
+                    visited.add(neighbor);
+                    addedToQueueBy[neighbor] = node;
+                    queue.push(neighbor);
+                }
             }
-
-            if (!visited.has(neighbor)) {
-                visited.add(neighbor);
-                addedToQueueBy[neighbor] = node;
-                queue.push(neighbor);
-            }
+            stepWiseVisited.push([...visited]);
         }
-        stepWiseVisited.push([...visited]);
-    }
 
-    return { pathExists: false, addedToQueueBy, visited, stepWiseVisited };
+        resolve({ pathExists: false, addedToQueueBy, visited, stepWiseVisited });
+        return
+    });
 };
 
 

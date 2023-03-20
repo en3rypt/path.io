@@ -18,7 +18,7 @@ function Footer() {
                             
                         <p> A <a href='https://github.com/jassuwu' target='_blank' className='underline font-semibold'>
                                 jass
-                            </a> && 
+                            </a> && &#8203;
                             <a href='https://github.com/en3rypt' target='_blank' className='underline font-semibold'>
                                 en3rypt
                             </a> product.
