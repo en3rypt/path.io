@@ -19,12 +19,12 @@ function Stats(props) {
                             <td className='px-3'>{props.grid.rows*props.grid.cols}</td>
                         </tr>
                         <tr>
-                            <td>Wall Nodes</td>
-                            <td className='px-3'>{props.grid.wallNodes}</td>
-                        </tr>
-                        <tr>
                             <td>Visited Nodes</td>
                             <td className='px-3'>{props.grid.visitedNodes}</td>
+                        </tr>
+                        <tr>
+                            <td>Path Nodes</td>
+                            <td className='px-3'>{props.grid.pathNodes}</td>
                         </tr>
                         {/* <tr>
                             <td>Explored Nodes </td>

@@ -148,24 +148,24 @@ function Grid(props) {
     if (node.isStartNode) {
       classname += " bg-green-500 animate-wallAnimation"
     }
-    if (node.isEndNode) {
+    else if (node.isEndNode) {
       classname += " bg-red-500 animate-wallAnimation"
     }
-    if (node.isWall) {
+    else if (node.isWall) {
       classname += " bg-stone-500 animate-wallAnimation"
     }
-    if (node.isVisited) {
-      classname += " bg-blue-500 animate-wallAnimation"
+    else if (node.isPath) {
+      classname += " bg-cyan-400 animate-pathAnimation"
     }
-    if (node.isPath) {
-      classname += " bg-cyan-400 animate-wallAnimation"
+    else if (node.isVisited) {
+      classname += " bg-blue-500 animate-wallAnimation"
     }
     
     return classname
   }
 
   return (
-    <div className='py-5 flex flex-col justify-center items-center'>
+    <div className='py-2 flex flex-col justify-center items-center'>
       {
         props.grid.nodes.map((row, rowIndex) => {
           return (
