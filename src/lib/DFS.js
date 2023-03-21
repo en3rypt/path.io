@@ -40,7 +40,7 @@ const DFS = (graphNodes, start, end) => {
             if (node === endString) {
                 const pathTaken = pathNodes(addedToStackBy, end);
                 resolve({ pathExists: true, pathTaken, visited, stepWiseVisited, stepWisePath: toStepWisePath(pathTaken) });
-                console.log("pathTaken", pathTaken);
+                // console.log("pathTaken", pathTaken);
                 return;
             }
 
