@@ -33,6 +33,7 @@ const ASTAR = (graphNodes, start, end) => {
         while (priorityQueue.length > 0) {
             priorityQueue.sort((a, b) => (a.costSoFar + a.heuristicValue) - (b.costSoFar + b.heuristicValue));
             const { node, costSoFar } = priorityQueue.shift();
+            stepWiseVisited.push([...visited]);
 
             if (node === endString) {
                 const pathTaken = pathNodes(addedToQueueBy, end);
@@ -48,7 +49,6 @@ const ASTAR = (graphNodes, start, end) => {
                     priorityQueue.push(neighbor);
                 }
             }
-            stepWiseVisited.push([...visited]);
         }
         resolve({ pathExists: false, addedToQueueBy, visited, stepWiseVisited });
         return
