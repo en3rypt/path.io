@@ -11,7 +11,7 @@ const algorithms = [
     { name: 'Depth First Search', id: 2 },
     { name: 'Depth Limited Search', id: 3 },
     { name: 'Iterative deepening depth-first search', id: 4 },
-    // { name: 'Bi-Directional Search',id:5 },
+    { name: 'Bi-Directional Search', id: 5 },
     { name: 'Greedy Best First Search', id: 6 },
     { name: 'A* Search', id: 7 },
 ]
@@ -148,7 +148,7 @@ function Commands(props) {
             // BFS
             decorator = executionTime(BFS)
             response = await decorator(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode);
-            console.log(response.result)
+            // console.log(response.result)
             answer = response.result;
             time = response.time;
 
@@ -172,10 +172,6 @@ function Commands(props) {
             time = response.time;
         } else if (selected.name === 'Bi-Directional Search') {
             // BDS (Requires special implementation - so better to remove)
-            // answer = BDS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode);
-            // visited = BDS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).visited;
-            // stepWisePath = BDS(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode).stepWisePath;
-            // console.log(stepWisePath, 'BDS')
             decorator = executionTime(BDS)
             response = await decorator(generateGraphFromGridNodes(props.grid.nodes).adjacencyList, props.grid.startNode, props.grid.endNode);
             answer = response.result;

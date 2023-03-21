@@ -1,29 +1,32 @@
 // Bidirectional Search
-const pathNodes = (atqb, endNode) => {
-    const nodesToColor = [];
-    const endNodeString = `${endNode.x}-${endNode.y}`;
-    let currentNode = endNodeString;
+const pathNodes = (atqb, meetingNodeString) => {
+    const pathTaken = [];
+    let currentNode = meetingNodeString;
     while (currentNode) {
-        nodesToColor.push(currentNode);
+        console.log(currentNode, pathTaken);
+        pathTaken.push(currentNode);
         currentNode = atqb[currentNode];
     }
-    return nodesToColor;
+    return pathTaken;
 }
 
-const getMeetingNode = (atqb, atqb2) => {
+const getMeetingNode = (atqb, atqb2, start, end) => {
     const visited = new Set();
-    let currentNode = atqb[endString];
+    const startString = `${start.x}-${start.y}`;
+    const endString = `${end.x}-${end.y}`;
+    let currentNode = startString;
     while (currentNode) {
         visited.add(currentNode);
         currentNode = atqb[currentNode];
     }
-    currentNode = atqb2[startString];
+    currentNode = endString;
     while (currentNode) {
         if (visited.has(currentNode)) {
             return currentNode;
         }
         currentNode = atqb2[currentNode];
     }
+    return null;
 }
 
 
@@ -66,11 +69,13 @@ const BDS = (graphNodes, start, end) => {
                 if (visited2.has(neighbor)) {
                     addedToQueueBy[neighbor] = node;
                     visited.add(neighbor);
-                    stepWiseVisited.push([...visited]);
-                    const meetingNode = getMeetingNode(addedToQueueBy, addedToQueueBy2);
+                    stepWiseVisited.push([...visited, ...visited2]);
+                    const meetingNode = getMeetingNode(addedToQueueBy, addedToQueueBy2, start, end);
+                    console.log(meetingNode);
                     const pathTaken = pathNodes(addedToQueueBy, meetingNode);
                     const pathTaken2 = pathNodes(addedToQueueBy2, meetingNode);
-                    return { pathExists: true, pathTaken, visited, stepWiseVisited, stepWisePath: toStepWisePath(pathTaken, pathTaken2) };
+                    resolve({ pathExists: true, pathTaken, visited, stepWiseVisited, stepWisePath: toStepWisePath(pathTaken, pathTaken2) });
+                    return;
                 }
 
                 if (!visited.has(neighbor)) {
@@ -84,8 +89,9 @@ const BDS = (graphNodes, start, end) => {
                 if (visited.has(neighbor)) {
                     addedToQueueBy2[neighbor] = node2;
                     visited2.add(neighbor);
-                    stepWiseVisited.push([...visited2]);
-                    const meetingNode = getMeetingNode(addedToQueueBy, addedToQueueBy2);
+                    stepWiseVisited.push([...visited2, ...visited]);
+                    const meetingNode = getMeetingNode(addedToQueueBy, addedToQueueBy2, start, end);
+                    console.log(meetingNode)
                     const pathTaken = pathNodes(addedToQueueBy, meetingNode);
                     const pathTaken2 = pathNodes(addedToQueueBy2, meetingNode);
                     resolve({ pathExists: true, pathTaken, visited, stepWiseVisited, stepWisePath: toStepWisePath(pathTaken, pathTaken2) });
@@ -98,8 +104,7 @@ const BDS = (graphNodes, start, end) => {
                     queue2.push(neighbor);
                 }
             }
-            stepWiseVisited.push([...visited]);
-            stepWiseVisited.push([...visited2]);
+            stepWiseVisited.push([...visited, ...visited2]);
         }
 
         resolve({ pathExists: false, addedToQueueBy, visited, stepWiseVisited });
